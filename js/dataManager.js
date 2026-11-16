@@ -24,7 +24,7 @@ export const DEFAULT_REPO_NAME = 'navhub-data'; // 默认创建的仓库名
 
 // === 默认内置数据源列表 ===
 export const defaultSiteDataSources = [
-    { name: "东师信科一站通", path: "data/01东师信科一站通.json" },
+    { name: "东师信科一站通", path: "data/01资源.json" },
     { name: "服务", path: "data/02服务.json" }
 ];
 
