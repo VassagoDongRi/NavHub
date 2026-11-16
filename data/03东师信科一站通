@@ -1,0 +1,318 @@
+{
+  "categories": [
+    {
+      "name": "校内常用",
+      "sites": [
+        {
+          "title": "统一身份认证平台",
+          "url": "https://authserver.nenu.edu.cn/authserver/login",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "东师统一登录入口",
+          "proxy": false
+        },
+        {
+          "title": "教务管理系统",
+          "url": "https://bkjx.nenu.edu.cn/new/welcome.page?ui=new",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "选课与成绩查询",
+          "proxy": false
+        },
+        {
+          "title": "网上共青团·智慧团建",
+          "url": "https://zhtj.youth.cn/zhtj/mine/home",
+          "icon": "https://favicon.im/youth.cn",
+          "desc": "团员信息管理平台",
+          "proxy": false
+        },
+        {
+          "title": "东师个人邮箱",
+          "url": "https://mail.nenu.edu.cn/static/sirius-web/?version=1783326786304/#mailbox",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "校园官方邮箱",
+          "proxy": false
+        },
+        {
+          "title": "学信网",
+          "url": "https://www.chsi.com.cn/",
+          "icon": "https://favicon.im/chsi.com.cn",
+          "desc": "学历学籍查询",
+          "proxy": false
+        },
+        {
+          "title": "财务网上查询系统",
+          "url": "https://cwcx.nenu.edu.cn/zl/tjtb",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "校园财务信息查询",
+          "proxy": false
+        },
+        {
+          "title": "东师财务处",
+          "url": "https://cwc.nenu.edu.cn/",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "财务处官方网站",
+          "proxy": false
+        },
+        {
+          "title": "东北师范大学图书馆",
+          "url": "https://www.library.nenu.edu.cn/engine2/custom/nenu/index",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "文献与图书资源",
+          "proxy": false
+        },
+        {
+          "title": "东北师范大学",
+          "url": "https://www.nenu.edu.cn/",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "学校官方网站",
+          "proxy": false
+        },
+        {
+          "title": "校园缴费平台",
+          "url": "https://pay.nenu.edu.cn/portal.html",
+          "icon": "https://favicon.im/nenu.edu.cn",
+          "desc": "学费住宿费缴纳",
+          "proxy": false
+        }
+      ]
+    },
+    {
+      "name": "在线学习",
+      "sites": [
+        {
+          "title": "东师雨课堂",
+          "url": "https://dongshi.yuketang.cn/pro/courselist",
+          "icon": "https://favicon.im/yuketang.cn",
+          "desc": "东师专属在线课堂",
+          "proxy": false
+        },
+        {
+          "title": "东师学习通",
+          "url": "https://i.chaoxing.com/base?vflag=true&fid=2311&backUrl=http://nenu.fanya.chaoxing.com",
+          "icon": "https://favicon.im/chaoxing.com",
+          "desc": "课程学习与签到",
+          "proxy": false
+        },
+        {
+          "title": "智慧树网",
+          "url": "https://www.zhihuishu.com/",
+          "icon": "https://favicon.im/zhihuishu.com",
+          "desc": "共享学分课平台",
+          "proxy": false
+        },
+        {
+          "title": "易班网",
+          "url": "https://ww.yiban.cn/",
+          "icon": "https://favicon.im/yiban.cn",
+          "desc": "高校教育教学平台",
+          "proxy": false
+        },
+        {
+          "title": "iwrite",
+          "url": "https://iwrite.unipus.cn/studentIndex",
+          "icon": "https://favicon.im/unipus.cn",
+          "desc": "英语写作教学系统",
+          "proxy": false
+        },
+        {
+          "title": "Utalk视听实训",
+          "url": "https://utalk.unipus.cn/v2/pc/tm/s/classCourse",
+          "icon": "https://favicon.im/unipus.cn",
+          "desc": "英语视听说实训",
+          "proxy": false
+        },
+        {
+          "title": "ETEST 通行证",
+          "url": "https://passport.neea.edu.cn/Manage/Index?see=1",
+          "icon": "https://favicon.im/neea.edu.cn",
+          "desc": "教育考试院账号中心",
+          "proxy": false
+        },
+        {
+          "title": "中国大学MOOC",
+          "url": "https://www.icourse163.org/",
+          "icon": "https://favicon.im/icourse163.org",
+          "desc": "优质在线课程学习",
+          "proxy": false
+        }
+      ]
+    },
+    {
+      "name": "编程学习",
+      "sites": [
+        {
+          "title": "PTA",
+          "url": "https://pintia.cn/",
+          "icon": "https://favicon.im/pintia.cn",
+          "desc": "程序设计类实验辅助平台",
+          "proxy": false
+        },
+        {
+          "title": "洛谷",
+          "url": "https://www.luogu.com.cn/",
+          "icon": "https://favicon.im/luogu.com.cn",
+          "desc": "计算机科学教育新生态",
+          "proxy": false
+        },
+        {
+          "title": "Codeforces",
+          "url": "https://codeforces.com/",
+          "icon": "https://favicon.im/codeforces.com",
+          "desc": "全球知名算法竞赛平台",
+          "proxy": false
+        },
+        {
+          "title": "Virtual Judge",
+          "url": "https://vjudge.net/",
+          "icon": "https://favicon.im/vjudge.net",
+          "desc": "跨平台虚拟评测系统",
+          "proxy": false
+        },
+        {
+          "title": "OI Wiki 基础篇",
+          "url": "https://oi-wiki.org/basic/",
+          "icon": "https://favicon.im/oi-wiki.org",
+          "desc": "算法竞赛基础语法与知识",
+          "proxy": false
+        },
+        {
+          "title": "C语言中文网",
+          "url": "http://c.biancheng.net/",
+          "icon": "https://favicon.im/biancheng.net",
+          "desc": "C语言程序设计门户",
+          "proxy": false
+        },
+        {
+          "title": "廖雪峰的官方网站",
+          "url": "https://www.liaoxuefeng.com/",
+          "icon": "https://favicon.im/liaoxuefeng.com",
+          "desc": "Python等编程教程",
+          "proxy": false
+        },
+        {
+          "title": "CSDN",
+          "url": "https://www.csdn.net/",
+          "icon": "https://favicon.im/csdn.net",
+          "desc": "专业开发者社区",
+          "proxy": false
+        },
+        {
+          "title": "清华大学开源软件镜像站",
+          "url": "https://mirrors.tuna.tsinghua.edu.cn/",
+          "icon": "https://favicon.im/tsinghua.edu.cn",
+          "desc": "极速下载开源软件",
+          "proxy": false
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/",
+          "icon": "https://favicon.im/github.com",
+          "desc": "全球最大代码托管平台",
+          "proxy": false
+        },
+        {
+          "title": "蓝桥杯软件类刷题",
+          "url": "https://www.lanqiao.cn/problems/",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "蓝桥云课在线刷题系统",
+          "proxy": false
+        },
+        {
+          "title": "4T Wiki 电子类题库",
+          "url": "https://www.4t.wiki/questions",
+          "icon": "https://favicon.im/4t.wiki",
+          "desc": "电子类专业技能题库",
+          "proxy": false
+        },
+        {
+          "title": "4T Wiki 电子类课程",
+          "url": "https://www.4t.wiki/study/curriculum",
+          "icon": "https://favicon.im/4t.wiki",
+          "desc": "电子类相关课程资源",
+          "proxy": false
+        },
+        {
+          "title": "AtCoder",
+          "url": "https://atcoder.jp/",
+          "icon": "https://favicon.im/atcoder.jp",
+          "desc": "日本算法竞赛平台",
+          "proxy": false
+        },
+        {
+          "title": "牛客竞赛OJ",
+          "url": "https://ac.nowcoder.com/",
+          "icon": "https://favicon.im/nowcoder.com",
+          "desc": "信息学编程算法训练",
+          "proxy": false
+        }
+      ]
+    },
+    {
+      "name": "赛事与升学",
+      "sites": [
+        {
+          "title": "蓝桥杯大赛官网",
+          "url": "https://dasai.lanqiao.cn/pages/v7/dasai/competition/individual_competition.html",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "全国大学生TMT行业赛事",
+          "proxy": false
+        },
+        {
+          "title": "蓝桥杯备战知识图谱",
+          "url": "https://www.lanqiao.cn/cup/",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "官方考点知识体系梳理",
+          "proxy": false
+        },
+        {
+          "title": "蓝桥杯大赛编译环境",
+          "url": "https://dasai.lanqiao.cn/notices/1096/",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "官方比赛环境配置说明",
+          "proxy": false
+        },
+        {
+          "title": "蓝桥杯历届真题 (第1~12届)",
+          "url": "https://www.lanqiao.cn/courses/2786",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "早期历年真题题库",
+          "proxy": false
+        },
+        {
+          "title": "蓝桥杯历届真题 (第13届至今)",
+          "url": "https://www.lanqiao.cn/courses/67522",
+          "icon": "https://favicon.im/lanqiao.cn",
+          "desc": "近年最新真题题库",
+          "proxy": false
+        },
+        {
+          "title": "赛氪",
+          "url": "https://saikr.com/",
+          "icon": "https://favicon.im/saikr.com",
+          "desc": "全国大学生竞赛活动平台",
+          "proxy": false
+        },
+        {
+          "title": "新职业在线学习平台",
+          "url": "https://xzy.mohrss.gov.cn/",
+          "icon": "https://favicon.im/mohrss.gov.cn",
+          "desc": "职业技能提升平台",
+          "proxy": false
+        },
+        {
+          "title": "国家大学生就业服务平台",
+          "url": "https://www.ncss.cn/",
+          "icon": "https://favicon.im/ncss.cn",
+          "desc": "官方就业服务与招聘",
+          "proxy": false
+        },
+        {
+          "title": "中国留学网",
+          "url": "https://www.cscse.edu.cn/",
+          "icon": "https://favicon.im/cscse.edu.cn",
+          "desc": "留学服务与身份认证",
+          "proxy": false
+        }
+      ]
+    }
+  ]
+}
