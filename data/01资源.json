@@ -1,7 +1,8 @@
 {
   "categories": [
     {
-      "name": "校内常用",
+      "categoryName": "🏛️ 校内常用",
+      "categoryId": "xiaoneichangyong",
       "sites": [
         {
           "title": "统一身份认证平台",
@@ -76,7 +77,8 @@
       ]
     },
     {
-      "name": "在线学习",
+      "categoryName": "💻 在线学习",
+      "categoryId": "zaixianxuexi",
       "sites": [
         {
           "title": "东师雨课堂",
@@ -137,7 +139,8 @@
       ]
     },
     {
-      "name": "编程学习",
+      "categoryName": "⌨️ 编程学习",
+      "categoryId": "bianchengxuexi",
       "sites": [
         {
           "title": "PTA",
@@ -247,7 +250,8 @@
       ]
     },
     {
-      "name": "赛事与升学",
+      "categoryName": "🏆 赛事与升学",
+      "categoryId": "saishiyushengxue",
       "sites": [
         {
           "title": "蓝桥杯大赛官网",
