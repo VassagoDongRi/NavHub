@@ -1,6 +1,33 @@
 {
   "categories": [
     {
+      "categoryName": "📚 我的笔记",
+      "categoryId": "studynotes",
+      "sites": [
+        {
+          "title": "C 语言 Wiki",
+          "url": "./study-notes/c-study/c-wiki.html",
+          "icon": "favicon.svg",
+          "desc": "C 语法速查 · 指针 · 内存 · 标准库",
+          "proxy": false
+        },
+        {
+          "title": "C 算法板子笔记",
+          "url": "./study-notes/c-study/c-alogorithm-board.html",
+          "icon": "favicon.svg",
+          "desc": "排序 · 二分 · 并查集 · 树状数组 · 图论模板",
+          "proxy": false
+        },
+        {
+          "title": "C++ Wiki",
+          "url": "./study-notes/cpp-study/cpp-wiki.html",
+          "icon": "favicon.svg",
+          "desc": "STL · 智能指针 · 迭代器失效 · 常见坑",
+          "proxy": false
+        }
+      ]
+    },
+    {
       "categoryName": "🏛️ 校内常用",
       "categoryId": "xiaoneichangyong",
       "sites": [
