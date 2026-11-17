@@ -14,7 +14,7 @@ export const NAV_CUSTOM_SOURCES_KEY = 'nav-custom-data-sources'; // 本地自定
 export const NAV_CUSTOM_USER_SITES_KEY = 'nav-user-custom-sites-data'; // 本地“我的导航”数据
 export const PROXY_MODE_KEY = 'proxy-mode-preference';
 export const CUSTOM_CATEGORY_ID = 'custom-user-sites';
-export const DEFAULT_SITES_PATH = "data/02服务.json";
+export const DEFAULT_SITES_PATH = "data/01资源.json";
 
 // === GitHub 相关常量 ===
 export const GITHUB_TOKEN_KEY = 'navhub-github-token';
