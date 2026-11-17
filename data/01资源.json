@@ -5,10 +5,10 @@
       "categoryId": "xiaoneichangyong",
       "sites": [
         {
-          "title": "统一身份认证平台",
-          "url": "https://authserver.nenu.edu.cn/authserver/login",
+          "title": "东北师范大学",
+          "url": "https://www.nenu.edu.cn/",
           "icon": "https://favicon.im/nenu.edu.cn",
-          "desc": "东师统一登录入口",
+          "desc": "学校官方网站",
           "proxy": false
         },
         {
@@ -58,13 +58,6 @@
           "url": "https://www.library.nenu.edu.cn/engine2/custom/nenu/index",
           "icon": "https://favicon.im/nenu.edu.cn",
           "desc": "文献与图书资源",
-          "proxy": false
-        },
-        {
-          "title": "东北师范大学",
-          "url": "https://www.nenu.edu.cn/",
-          "icon": "https://favicon.im/nenu.edu.cn",
-          "desc": "学校官方网站",
           "proxy": false
         },
         {
