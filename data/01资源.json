@@ -164,8 +164,8 @@
           "proxy": false
         },
         {
-          "title": "OI Wiki 基础篇",
-          "url": "https://oi-wiki.org/basic/",
+          "title": "OI Wiki",
+          "url": "https://oi-wiki.org/",
           "icon": "https://favicon.im/oi-wiki.org",
           "desc": "算法竞赛基础语法与知识",
           "proxy": false
