@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ 学习指南 Wiki</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #273449;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #818cf8;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --radius: 12px;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ========== 侧边栏 ========== */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    padding: 24px 0;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sidebar-header h1 span { color: var(--accent); }
+
+  .sidebar-header p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .nav-group { margin-bottom: 8px; }
+
+  .nav-group-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 8px 20px 4px;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 6px 20px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .sidebar a:hover,
+  .sidebar a.active {
+    color: var(--text);
+    background: rgba(56, 189, 248, 0.08);
+    border-left-color: var(--accent);
+  }
+
+  /* ========== 主内容 ========== */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px 80px;
+    max-width: 1100px;
+  }
+
+  /* 搜索栏 */
+  .search-bar {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 12px 0 16px;
+    z-index: 50;
+    margin-bottom: 8px;
+  }
+
+  .search-bar input {
+    width: 100%;
+    max-width: 480px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-bar input:focus { border-color: var(--accent); }
+  .search-bar input::placeholder { color: var(--muted); }
+
+  /* 标题 */
+  .page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+  }
+
+  /* 章节 */
+  section {
+    margin-bottom: 48px;
+    scroll-margin-top: 80px;
+  }
+
+  section > h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  section > h2 .badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: var(--accent);
+  }
+
+  h4 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin: 16px 0 6px;
+    color: var(--text);
+  }
+
+  /* 卡片 */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  /* 表格 */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 12px 0 18px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  thead { background: var(--surface-2); }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(56, 189, 248, 0.04); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: rgba(56, 189, 248, 0.08);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  td code { background: transparent; padding: 0; }
+
+  /* 代码块 */
+  pre {
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin: 10px 0 16px;
+    color: #cbd5e1;
+  }
+
+  pre .kw { color: #c084fc; }
+  pre .type { color: #38bdf8; }
+  pre .str { color: #34d399; }
+  pre .num { color: #fbbf24; }
+  pre .cmt { color: #64748b; font-style: italic; }
+  pre .fn { color: #fbbf24; }
+
+  /* 提示框 */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(56, 189, 248, 0.06);
+    padding: 12px 16px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 12px 0;
+    font-size: 0.88rem;
+  }
+
+  .callout.warn {
+    border-left-color: var(--amber);
+    background: rgba(251, 191, 36, 0.06);
+  }
+
+  .callout.danger {
+    border-left-color: var(--red);
+    background: rgba(248, 113, 113, 0.06);
+  }
+
+  .callout strong { color: var(--text); }
+
+  /* 标签 */
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  .tag.green { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+  .tag.amber { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+  .tag.red { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+  .tag.blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+
+  /* 时间线 */
+  .timeline { position: relative; padding-left: 24px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 22px 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 7px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .timeline-item h4 { margin-top: 0; color: var(--accent); }
+
+  .timeline-item .stage-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* 列表 */
+  ul, ol { padding-left: 22px; margin: 8px 0 14px; }
+
+  li { margin-bottom: 5px; font-size: 0.9rem; }
+
+  li code { font-size: 0.8rem; }
+
+  /* 页脚 */
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* 隐藏搜索过滤 */
+  .search-hidden { display: none !important; }
+
+  /* 响应式 */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      transition: left 0.25s;
+    }
+
+    .sidebar.open { left: 0; }
+
+    .main { padding: 24px 20px 80px; }
+
+    .page-title { font-size: 1.5rem; }
+
+    .menu-toggle { display: flex; }
+
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ==================== 侧边栏 ==================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>C++ <span>Wiki</span></h1>
+    <p>学习指南 · 速查手册</p>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">入门</div>
+    <a href="#roadmap">学习路线图</a>
+    <a href="#env">开发环境与工具</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">STL 容器</div>
+    <a href="#stl-overview">容器分类概览</a>
+    <a href="#vector">vector</a>
+    <a href="#deque-list">deque 与 list</a>
+    <a href="#map-set">map 与 set</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">STL 算法</div>
+    <a href="#algo-common">常用算法速查</a>
+    <a href="#algo-examples">典型用法示例</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">现代 C++</div>
+    <a href="#smart-ptr">智能指针</a>
+    <a href="#move">移动语义</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">陷阱与规范</div>
+    <a href="#pitfalls">常见陷阱</a>
+    <a href="#iterator-invalidation">迭代器失效</a>
+    <a href="#style">编程规范</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">附录</div>
+    <a href="#cheatsheet">头文件速查</a>
+  </div>
+</aside>
+
+<!-- ==================== 主内容 ==================== -->
+<main class="main">
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜索本页内容（函数名、关键字…）" autocomplete="off">
+  </div>
+
+  <h1 class="page-title">C++ 学习指南 Wiki</h1>
+  <p class="page-subtitle">从入门到进阶的系统化参考 · 持续更新</p>
+
+  <!-- ========== 学习路线图 ========== -->
+  <section id="roadmap">
+    <h2>学习路线图 <span class="badge">ROADMAP</span></h2>
+    <p>以下路线基于现代 C++ 学习共识整理，总周期约 <strong>12–20 周</strong>（视基础与投入时间而定）。每个阶段均有明确的产出目标与检验标准。</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <h4>阶段 0 · 环境准备</h4>
+        <div class="stage-meta">0.5–1 天</div>
+        <p>完成编译器与编辑器搭建，能编译运行第一个 <code>Hello, World!</code>。Windows 推荐 MinGW-w64/MSVC + VS Code；Mac 使用 Xcode Command Line Tools；Linux 使用 GCC/Clang。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 1 · 入门基础</h4>
+        <div class="stage-meta">2–3 周</div>
+        <p>掌握变量与数据类型、运算符、流程控制（if/for/while）、函数（定义/调用/参数传递）、数组与字符串。理解编译链接流程、头文件保护宏、指针与引用的基本区别。关键产出：控制台计算器、猜数字游戏、简易通讯录（数组版）。常见坑：变量未初始化、数组越界、野指针。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 2 · 面向对象核心</h4>
+        <div class="stage-meta">3–4 周</div>
+        <p>类与对象、封装与访问控制、构造函数/析构函数；拷贝构造与赋值运算符重载（深拷贝 vs 浅拷贝）；继承与多态（虚函数、vtable 概念）；static 成员、友元、模板基础。关键产出：设计一个具备继承体系的班级/图书管理系统。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 3 · 现代 C++ 与 STL</h4>
+        <div class="stage-meta">2–3 周</div>
+        <p>STL 容器（vector、map、set、unordered_map 等）与算法（sort、find、accumulate、lower_bound 等）；迭代器概念与失效规则；智能指针（unique_ptr、shared_ptr）；移动语义与 <code>std::move</code>。关键产出：使用 STL 重构通讯录，用 <code>map</code> 做词频统计，用 <code>sort</code> + 自定义比较器排序。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 4 · 系统与实战</h4>
+        <div class="stage-meta">4–6 周</div>
+        <p>RAII 原则、异常安全、文件 I/O、多线程基础（<code>std::thread</code>、<code>mutex</code>）、CMake 构建多文件项目。实战项目建议：简易 HTTP 服务器、命令行任务管理器、基于 STL 的日志分析工具。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 5 · 面试冲刺（可选）</h4>
+        <div class="stage-meta">2–3 周</div>
+        <p>高频考点：虚函数底层机制、智能指针实现原理、STL 容器底层数据结构与复杂度、迭代器失效场景、移动语义与完美转发、C++11/14/17 关键新特性。刷题以 LeetCode STL 相关题目为主，侧重边界条件与复杂度分析。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 开发环境 ========== -->
+  <section id="env">
+    <h2>开发环境与工具 <span class="badge">TOOLS</span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>工具</th><th>推荐选择</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>编译器</td><td>GCC / Clang / MSVC</td><td>GCC 和 Clang 跨平台，MSVC 在 Windows 上集成度好。建议至少开启 <code>-std=c++17</code> 或更新标准。</td></tr>
+          <tr><td>编辑器/IDE</td><td>VS Code + C/C++ 扩展；CLion</td><td>VS Code 轻量灵活，CLion 开箱即用但为付费产品。Visual Studio 适合 Windows 桌面开发。</td></tr>
+          <tr><td>构建系统</td><td>CMake</td><td>事实上的 C++ 构建标准，几乎所有开源项目使用。至少掌握 <code>add_executable</code>、<code>target_link_libraries</code> 与 <code>target_include_directories</code>。</td></tr>
+          <tr><td>调试器</td><td>GDB / LLDB / Visual Studio Debugger</td><td>熟练使用断点、单步、查看调用栈与变量。VS Code 配合 <code>launch.json</code> 可图形化调试。</td></tr>
+          <tr><td>静态分析</td><td>clang-tidy、cppcheck</td><td>在编译期发现潜在缺陷（未初始化、资源泄漏、风格问题）。建议集成到编辑器中实时提示。</td></tr>
+          <tr><td>格式化</td><td>clang-format</td><td>配合 <code>.clang-format</code> 文件统一团队风格。Google 风格是常见选择。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========== STL 容器 ========== -->
+  <section id="stl-overview">
+    <h2>STL 容器分类概览 <span class="badge">CONTAINERS</span></h2>
+    <p>STL 容器主要分为四大类，理解分类是选择正确容器的前提。</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>类别</th><th>典型容器</th><th>底层结构</th><th>特点与适用场景</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>序列式容器</strong></td>
+            <td><code>vector</code>、<code>deque</code>、<code>list</code></td>
+            <td>动态数组 / 分块数组 / 双向链表</td>
+            <td>按插入顺序存储。vector 随机访问最快；deque 首尾插入高效；list 任意位置插入/删除 O(1)，但不支持随机访问。</td>
+          </tr>
+          <tr>
+            <td><strong>关联式容器</strong></td>
+            <td><code>set</code>、<code>map</code>、<code>multiset</code>、<code>multimap</code></td>
+            <td>红黑树</td>
+            <td>元素按键自动排序，查找/插入/删除 O(log n)。需要有序遍历或范围查询时使用。</td>
+          </tr>
+          <tr>
+            <td><strong>无序关联式容器</strong></td>
+            <td><code>unordered_set</code>、<code>unordered_map</code></td>
+            <td>哈希表</td>
+            <td>平均 O(1) 查找，不保证顺序。追求平均性能、对顺序无要求时的首选。</td>
+          </tr>
+          <tr>
+            <td><strong>容器适配器</strong></td>
+            <td><code>stack</code>、<code>queue</code>、<code>priority_queue</code></td>
+            <td>封装 deque / vector 等</td>
+            <td>提供受限接口。stack 后进先出；queue 先进先出；priority_queue 按优先级出队（默认大顶堆）。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>选择原则：</strong>默认 <code>vector</code>；需要按键快速查找用 <code>unordered_map</code>；需要有序键用 <code>map</code>；需要去重且有序用 <code>set</code>；频繁在中间插入/删除且不需随机访问时考虑 <code>list</code>。
+    </div>
+  </section>
+
+  <!-- ========== vector ========== -->
+  <section id="vector">
+    <h2>vector（动态数组） <span class="badge">SEQUENCE</span></h2>
+    <p><code>#include &lt;vector&gt;</code> · 连续内存 · 随机访问 O(1) · 尾部插入/删除均摊 O(1)。</p>
+
+    <h3>常用成员函数</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>函数</th><th>功能</th><th>注意</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>push_back(x)</code></td><td>尾部插入元素 x</td><td>可能触发扩容，使所有迭代器/指针/引用失效</td></tr>
+          <tr><td><code>pop_back()</code></td><td>删除尾部元素</td><td>容器为空时行为未定义</td></tr>
+          <tr><td><code>size()</code></td><td>当前元素个数</td><td>与 <code>capacity()</code> 区分：size 是实际元素数，capacity 是已分配内存可容纳的元素数</td></tr>
+          <tr><td><code>capacity()</code></td><td>当前分配的存储容量</td><td>通常 ≥ size，扩容策略因实现而异（常见 1.5 或 2 倍）</td></tr>
+          <tr><td><code>reserve(n)</code></td><td>预分配至少容纳 n 个元素的内存</td><td>只改变 capacity，不改变 size；避免频繁扩容的有效手段</td></tr>
+          <tr><td><code>resize(n)</code></td><td>将 size 调整为 n</td><td>n &gt; size 时填充默认值；n &lt; size 时截断</td></tr>
+          <tr><td><code>at(i)</code></td><td>访问下标 i 的元素，越界抛出 <code>std::out_of_range</code></td><td>比 <code>operator[]</code> 安全，但有轻微开销</td></tr>
+          <tr><td><code>operator[](i)</code></td><td>访问下标 i 的元素</td><td><strong>不检查越界</strong>，越界行为未定义</td></tr>
+          <tr><td><code>front() / back()</code></td><td>首元素 / 尾元素引用</td><td>容器为空时调用未定义</td></tr>
+          <tr><td><code>begin() / end()</code></td><td>正向迭代器</td><td><code>cbegin() / cend()</code> 返回只读迭代器（C++11）</td></tr>
+          <tr><td><code>erase(p)</code></td><td>删除迭代器 p 指向的元素</td><td>使被删除位置及之后的所有迭代器/引用失效；返回下一个有效迭代器</td></tr>
+          <tr><td><code>insert(p, x)</code></td><td>在 p 之前插入 x</td><td>可能使所有迭代器失效（若触发扩容）</td></tr>
+          <tr><td><code>clear()</code></td><td>清空所有元素</td><td>size 变为 0，capacity 通常不变</td></tr>
+          <tr><td><code>shrink_to_fit()</code></td><td>请求将 capacity 降至 size</td><td>非强制性，实现可以忽略</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>典型代码</h3>
+<pre><span class="cmt">// 预分配 + 范围 for</span>
+<span class="type">std::vector</span>&lt;<span class="type">int</span>&gt; v;
+v.<span class="fn">reserve</span>(<span class="num">100</span>);          <span class="cmt">// 避免中途扩容</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">100</span>; ++i) v.<span class="fn">push_back</span>(i);
+
+<span class="kw">for</span> (<span class="kw">const auto</span>&amp; x : v) {        <span class="cmt">// 只读遍历，避免拷贝</span>
+    <span class="type">std::cout</span> &lt;&lt; x &lt;&lt; <span class="str">' '</span>;
+}
+
+<span class="cmt">// 删除所有偶数（正确方式）</span>
+<span class="kw">for</span> (<span class="kw">auto</span> it = v.<span class="fn">begin</span>(); it != v.<span class="fn">end</span>(); ) {
+    <span class="kw">if</span> (*it % <span class="num">2</span> == <span class="num">0</span>) it = v.<span class="fn">erase</span>(it);
+    <span class="kw">else</span> ++it;
+}</pre>
+    <div class="callout warn">
+      <strong>迭代器失效：</strong>插入操作若触发扩容会使所有迭代器失效；<code>erase</code> 使被删除位置及之后的所有迭代器失效。循环中删除元素时，务必使用 <code>it = v.erase(it)</code> 的写法，而不是 <code>v.erase(it); ++it;</code>。
+    </div>
+  </section>
+
+  <!-- ========== deque / list ========== -->
+  <section id="deque-list">
+    <h2>deque 与 list <span class="badge">SEQUENCE</span></h2>
+
+    <h3>deque（双端队列）</h3>
+    <p><code>#include &lt;deque&gt;</code> · 分块连续内存 · 随机访问 O(1) · <strong>首尾</strong>插入/删除 O(1)。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>与 vector 的差异</th></tr></thead>
+        <tbody>
+          <tr><td><code>push_front(x)</code></td><td>头部插入</td><td>vector 没有此操作</td></tr>
+          <tr><td><code>pop_front()</code></td><td>头部删除</td><td>vector 没有此操作</td></tr>
+          <tr><td><code>push_back / pop_back</code></td><td>尾部操作</td><td>与 vector 相同</td></tr>
+          <tr><td><code>operator[] / at</code></td><td>随机访问</td><td>访问效率略低于 vector（多一层间接）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>适用场景：需要在两端频繁插入/删除，同时仍需要随机访问元素时（如滑动窗口、双端队列式任务调度）。</p>
+
+    <h3>list（双向链表）</h3>
+    <p><code>#include &lt;list&gt;</code> · 非连续内存 · <strong>不支持随机访问</strong> · 任意位置插入/删除 O(1)。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>push_front / pop_front</code></td><td>头部操作</td><td>O(1)</td></tr>
+          <tr><td><code>insert(p, x)</code></td><td>在 p 之前插入</td><td>O(1)，不使其他迭代器失效</td></tr>
+          <tr><td><code>erase(p)</code></td><td>删除 p 处元素</td><td>O(1)，仅使被删除元素的迭代器失效</td></tr>
+          <tr><td><code>splice(p, other, q)</code></td><td>将 other 中 q 处的节点“剪切”到 p 之前</td><td>O(1)，不拷贝/移动元素，仅调整指针</td></tr>
+          <tr><td><code>sort()</code></td><td>成员排序</td><td>list 不支持随机访问迭代器，不能用 <code>std::sort</code>，需使用成员 <code>sort()</code></td></tr>
+          <tr><td><code>remove(x)</code></td><td>删除所有值为 x 的元素</td><td>与 <code>std::remove</code> 不同，list 的成员版本真正删除节点</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>list 的独特优势：</strong><code>splice</code> 可以在 O(1) 时间内将节点从一个 list 移动到另一个 list，不涉及元素拷贝，适合需要频繁重组链表的场景。
+    </div>
+  </section>
+
+  <!-- ========== map / set ========== -->
+  <section id="map-set">
+    <h2>map 与 set <span class="badge">ASSOCIATIVE</span></h2>
+
+    <h3>map（有序键值对）</h3>
+    <p><code>#include &lt;map&gt;</code> · 红黑树 · 键唯一且自动排序 · 查找/插入/删除 O(log n)[reference:8]。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数 / 操作</th><th>功能</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>operator[](key)</code></td><td>访问 key 对应的值</td><td><strong>若 key 不存在，会插入默认值</strong>并返回引用；只想查找时应用 <code>find</code></td></tr>
+          <tr><td><code>at(key)</code></td><td>访问 key 对应的值</td><td>key 不存在时抛出 <code>std::out_of_range</code>，比 <code>[]</code> 安全</td></tr>
+          <tr><td><code>insert({key, val})</code></td><td>插入键值对</td><td>若 key 已存在则不插入（map 不覆盖），返回 <code>pair&lt;iterator, bool&gt;</code></td></tr>
+          <tr><td><code>find(key)</code></td><td>查找 key</td><td>找到返回迭代器，否则返回 <code>end()</code>。判断存在应使用 <code>m.find(k) != m.end()</code></td></tr>
+          <tr><td><code>count(key)</code></td><td>返回 key 的出现次数</td><td>对 map 而言是 0 或 1（multimap 可大于 1）</td></tr>
+          <tr><td><code>erase(key)</code></td><td>删除指定 key</td><td>返回删除的元素个数（map 中为 0 或 1）</td></tr>
+          <tr><td><code>lower_bound(key)</code></td><td>第一个键 ≥ key 的迭代器</td><td>有序范围查询的基础</td></tr>
+          <tr><td><code>upper_bound(key)</code></td><td>第一个键 &gt; key 的迭代器</td><td>配合 <code>lower_bound</code> 可获取等于 key 的区间</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>set（有序集合）</h3>
+    <p><code>#include &lt;set&gt;</code> · 红黑树 · 元素唯一且自动排序 · 操作 O(log n)[reference:9]。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>insert(x)</code></td><td>插入元素 x</td><td>若 x 已存在则不插入；返回 <code>pair&lt;iterator, bool&gt;</code></td></tr>
+          <tr><td><code>erase(x)</code></td><td>删除值为 x 的元素</td><td>返回删除个数（set 中为 0 或 1）</td></tr>
+          <tr><td><code>find(x)</code></td><td>查找 x</td><td>未找到返回 <code>end()</code></td></tr>
+          <tr><td><code>count(x)</code></td><td>返回 x 的个数</td><td>set 中为 0 或 1</td></tr>
+          <tr><td><code>lower_bound / upper_bound</code></td><td>范围查询</td><td>与 map 类似</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>unordered_map / unordered_set</h3>
+    <p><code>#include &lt;unordered_map&gt;</code> / <code>#include &lt;unordered_set&gt;</code> · 哈希表 · <strong>平均 O(1)</strong> 查找，不保证顺序[reference:10]。</p>
+    <div class="callout">
+      <strong>选择建议：</strong>需要有序遍历键 → <code>map</code>/<code>set</code>；只关心快速查找、对顺序无要求 → <code>unordered_map</code>/<code>unordered_set</code>。最坏情况下哈希表可能退化到 O(n)，但实际使用中平均性能通常显著优于红黑树。
+    </div>
+  </section>
+
+  <!-- ========== STL 算法 ========== -->
+  <section id="algo-common">
+    <h2>常用 STL 算法速查 <span class="badge">ALGORITHMS</span></h2>
+    <p>STL 提供约 100 个算法模板函数，大部分位于 <code>&lt;algorithm&gt;</code>，数值算法在 <code>&lt;numeric&gt;</code>[reference:11]。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>算法</th><th>头文件</th><th>功能</th><th>时间复杂度</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>sort(begin, end, cmp)</code></td><td><code>&lt;algorithm&gt;</code></td><td>对区间排序（默认升序，可传自定义比较器）</td><td>O(n log n)</td></tr>
+          <tr><td><code>stable_sort</code></td><td><code>&lt;algorithm&gt;</code></td><td>稳定排序，相等元素保持原有相对顺序</td><td>O(n log n)（可能额外内存）</td></tr>
+          <tr><td><code>find(begin, end, val)</code></td><td><code>&lt;algorithm&gt;</code></td><td>顺序查找第一个等于 val 的元素，返回迭代器</td><td>O(n)</td></tr>
+          <tr><td><code>find_if(begin, end, pred)</code></td><td><code>&lt;algorithm&gt;</code></td><td>查找第一个满足谓词的元素</td><td>O(n)</td></tr>
+          <tr><td><code>count(begin, end, val)</code></td><td><code>&lt;algorithm&gt;</code></td><td>统计等于 val 的元素个数</td><td>O(n)</td></tr>
+          <tr><td><code>count_if(begin, end, pred)</code></td><td><code>&lt;algorithm&gt;</code></td><td>统计满足谓词的元素个数</td><td>O(n)</td></tr>
+          <tr><td><code>reverse(begin, end)</code></td><td><code>&lt;algorithm&gt;</code></td><td>翻转区间</td><td>O(n)</td></tr>
+          <tr><td><code>unique(begin, end)</code></td><td><code>&lt;algorithm&gt;</code></td><td>去除<strong>相邻</strong>重复元素，返回去重后尾迭代器；需先排序才能全局去重</td><td>O(n)</td></tr>
+          <tr><td><code>binary_search(begin, end, val)</code></td><td><code>&lt;algorithm&gt;</code></td><td>在<strong>有序</strong>区间中二分查找，返回 bool</td><td>O(log n)</td></tr>
+          <tr><td><code>lower_bound(begin, end, val)</code></td><td><code>&lt;algorithm&gt;</code></td><td>第一个 ≥ val 的元素位置</td><td>O(log n)</td></tr>
+          <tr><td><code>upper_bound(begin, end, val)</code></td><td><code>&lt;algorithm&gt;</code></td><td>第一个 &gt; val 的元素位置</td><td>O(log n)</td></tr>
+          <tr><td><code>merge(b1, e1, b2, e2, out)</code></td><td><code>&lt;algorithm&gt;</code></td><td>合并两个有序区间到输出迭代器</td><td>O(n+m)</td></tr>
+          <tr><td><code>accumulate(begin, end, init)</code></td><td><code>&lt;numeric&gt;</code></td><td>对区间元素求和（可传自定义二元操作）</td><td>O(n)</td></tr>
+          <tr><td><code>max_element / min_element</code></td><td><code>&lt;algorithm&gt;</code></td><td>返回区间中最大/最小元素的迭代器</td><td>O(n)</td></tr>
+          <tr><td><code>transform(begin, end, out, op)</code></td><td><code>&lt;algorithm&gt;</code></td><td>对每个元素应用 op 并写入 out</td><td>O(n)</td></tr>
+          <tr><td><code>for_each(begin, end, fn)</code></td><td><code>&lt;algorithm&gt;</code></td><td>对每个元素调用 fn</td><td>O(n)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>注意：</strong><code>std::sort</code> 要求随机访问迭代器，因此 <code>list</code> 不能使用 <code>std::sort</code>，应使用成员函数 <code>list::sort()</code>。<code>binary_search</code>、<code>lower_bound</code>、<code>upper_bound</code> 要求区间已有序。
+    </div>
+  </section>
+
+  <section id="algo-examples">
+    <h2>典型算法用法示例 <span class="badge">EXAMPLES</span></h2>
+
+    <h3>sort + 自定义比较器</h3>
+<pre><span class="type">std::vector</span>&lt;<span class="type">std::pair</span>&lt;<span class="type">std::string</span>, <span class="type">int</span>&gt;&gt; items = {{<span class="str">"b"</span>, <span class="num">2</span>}, {<span class="str">"a"</span>, <span class="num">3</span>}, {<span class="str">"c"</span>, <span class="num">1</span>}};
+
+<span class="cmt">// 按 second 降序排列</span>
+<span class="type">std::sort</span>(items.<span class="fn">begin</span>(), items.<span class="fn">end</span>(),
+    [](<span class="kw">const auto</span>&amp; a, <span class="kw">const auto</span>&amp; b) {
+        <span class="kw">return</span> a.second &gt; b.second;
+    });</pre>
+
+    <h3>去重（sort + unique + erase）</h3>
+<pre><span class="type">std::vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">3</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>};
+<span class="type">std::sort</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());          <span class="cmt">// 先排序：1 1 2 2 3 3</span>
+<span class="kw">auto</span> last = <span class="type">std::unique</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>()); <span class="cmt">// 相邻去重</span>
+v.<span class="fn">erase</span>(last, v.<span class="fn">end</span>());              <span class="cmt">// 真正删除尾部冗余元素</span>
+<span class="cmt">// v 现在为 {1, 2, 3}</span></pre>
+
+    <h3>accumulate 求和与自定义操作</h3>
+<pre><span class="cmt">// 求和</span>
+<span class="type">std::vector</span>&lt;<span class="type">int</span>&gt; nums = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+<span class="type">int</span> sum = <span class="type">std::accumulate</span>(nums.<span class="fn">begin</span>(), nums.<span class="fn">end</span>(), <span class="num">0</span>); <span class="cmt">// 15</span>
+
+<span class="cmt">// 求乘积（使用自定义二元操作）</span>
+<span class="type">int</span> product = <span class="type">std::accumulate</span>(nums.<span class="fn">begin</span>(), nums.<span class="fn">end</span>(), <span class="num">1</span>,
+    [](<span class="type">int</span> a, <span class="type">int</span> b) { <span class="kw">return</span> a * b; }); <span class="cmt">// 120</span></pre>
+
+    <h3>lower_bound / upper_bound 范围查询</h3>
+<pre><span class="type">std::vector</span>&lt;<span class="type">int</span>&gt; sorted = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>};
+<span class="kw">auto</span> lo = <span class="type">std::lower_bound</span>(sorted.<span class="fn">begin</span>(), sorted.<span class="fn">end</span>(), <span class="num">20</span>); <span class="cmt">// 指向第一个 20</span>
+<span class="kw">auto</span> hi = <span class="type">std::upper_bound</span>(sorted.<span class="fn">begin</span>(), sorted.<span class="fn">end</span>(), <span class="num">20</span>); <span class="cmt">// 指向 30</span>
+<span class="cmt">// 区间 [lo, hi) 包含所有等于 20 的元素</span>
+<span class="type">std::cout</span> &lt;&lt; <span class="str">"20 的个数: "</span> &lt;&lt; (hi - lo) &lt;&lt; <span class="str">'\n'</span>; <span class="cmt">// 2</span></pre>
+  </section>
+
+  <!-- ========== 智能指针 ========== -->
+  <section id="smart-ptr">
+    <h2>智能指针 <span class="badge">MODERN C++</span></h2>
+    <p>智能指针是 RAII 原则在资源管理上的核心体现，用对象生命周期自动管理动态分配的内存，从根本上避免内存泄漏与悬空指针[reference:12][reference:13]。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>类型</th><th>所有权语义</th><th>是否可拷贝</th><th>开销</th><th>推荐场景</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>std::unique_ptr</code></td>
+            <td><strong>独占</strong>——同一时刻只有一个所有者</td>
+            <td>不可拷贝，可<code>std::move</code>转移</td>
+            <td>零额外开销（与裸指针相同）</td>
+            <td><strong>默认首选</strong>。绝大多数动态分配对象应使用 <code>unique_ptr</code></td>
+          </tr>
+          <tr>
+            <td><code>std::shared_ptr</code></td>
+            <td><strong>共享</strong>——引用计数归零时释放</td>
+            <td>可拷贝</td>
+            <td>控制块 + 原子引用计数，有额外开销</td>
+            <td>确实需要多个所有者共享同一对象时使用</td>
+          </tr>
+          <tr>
+            <td><code>std::weak_ptr</code></td>
+            <td>不增加引用计数的“弱引用”</td>
+            <td>可拷贝</td>
+            <td>不控制生命周期</td>
+            <td>打破 <code>shared_ptr</code> 循环引用；观察者模式中避免悬挂引用</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>用法对比</h3>
+<pre><span class="cmt">// unique_ptr：独占所有权</span>
+<span class="kw">auto</span> up = <span class="type">std::make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="num">42</span>);
+<span class="cmt">// auto up2 = up;              // ❌ 编译错误：不可拷贝</span>
+<span class="kw">auto</span> up2 = <span class="type">std::move</span>(up);    <span class="cmt">// ✅ 所有权转移，up 变为 nullptr</span>
+
+<span class="cmt">// shared_ptr：共享所有权</span>
+<span class="kw">auto</span> sp1 = <span class="type">std::make_shared</span>&lt;<span class="type">std::string</span>&gt;(<span class="str">"hello"</span>);
+{
+    <span class="kw">auto</span> sp2 = sp1;           <span class="cmt">// 引用计数 2</span>
+    <span class="cmt">// ...</span>
+}                               <span class="cmt">// sp2 析构，引用计数 1</span>
+<span class="cmt">// sp1 仍有效</span>
+
+<span class="cmt">// weak_ptr：观察 shared_ptr 而不延长生命周期</span>
+<span class="type">std::weak_ptr</span>&lt;<span class="type">std::string</span>&gt; wp = sp1;
+<span class="kw">if</span> (<span class="kw">auto</span> locked = wp.<span class="fn">lock</span>()) {  <span class="cmt">// 尝试提升为 shared_ptr</span>
+    <span class="type">std::cout</span> &lt;&lt; *locked;
+}</pre>
+
+    <div class="callout">
+      <strong>make 函数优先：</strong>优先使用 <code>std::make_unique</code> 和 <code>std::make_shared</code>，而不是 <code>new</code>。它们更安全（避免表达式求值顺序导致泄漏）、更高效（<code>make_shared</code> 一次分配控制块与对象）。
+    </div>
+  </section>
+
+  <!-- ========== 移动语义 ========== -->
+  <section id="move">
+    <h2>移动语义 <span class="badge">MODERN C++</span></h2>
+    <p>C++11 引入移动语义，允许资源（堆内存、文件句柄等）在对象间“转移”而非拷贝，显著提升性能。</p>
+
+    <h3>核心规则</h3>
+    <ul>
+      <li><strong>右值引用</strong> <code>T&amp;&amp;</code> 绑定到即将销毁的对象（临时对象、<code>std::move</code> 的结果）。</li>
+      <li><strong>移动构造函数</strong> 与 <strong>移动赋值运算符</strong> “窃取”源对象的资源，将源对象置于有效但未指定的状态。</li>
+      <li><code>std::move</code> 本身<strong>不移动任何东西</strong>，它只是一个类型转换，将左值转为右值引用，从而允许调用移动构造/赋值。</li>
+      <li>被 <code>std::move</code> 后的对象仍然有效，但不应再依赖其值（标准库容器通常变为空）。</li>
+    </ul>
+
+<pre><span class="kw">class</span> Buffer {
+    <span class="type">int</span>* data_;
+    <span class="type">size_t</span> size_;
+<span class="kw">public</span>:
+    <span class="cmt">// 移动构造函数</span>
+    Buffer(Buffer&amp;&amp; other) <span class="kw">noexcept</span>
+        : data_(other.data_), size_(other.size_) {
+        other.data_ = <span class="kw">nullptr</span>;       <span class="cmt">// 源对象放弃所有权</span>
+        other.size_ = <span class="num">0</span>;
+    }
+
+    <span class="cmt">// 移动赋值</span>
+    Buffer&amp; <span class="kw">operator</span>=(Buffer&amp;&amp; other) <span class="kw">noexcept</span> {
+        <span class="kw">if</span> (<span class="kw">this</span> != &amp;other) {
+            <span class="kw">delete</span>[] data_;
+            data_ = other.data_;
+            size_ = other.size_;
+            other.data_ = <span class="kw">nullptr</span>;
+            other.size_ = <span class="num">0</span>;
+        }
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+};</pre>
+
+    <div class="callout">
+      <strong>noexcept 的重要性：</strong>移动构造函数和移动赋值应标记为 <code>noexcept</code>。否则 <code>std::vector</code> 在扩容时可能放弃移动而改用拷贝，以确保异常安全（强异常保证）。[reference:15]
+    </div>
+  </section>
+
+  <!-- ========== 常见陷阱 ========== -->
+  <section id="pitfalls">
+    <h2>常见陷阱与避坑指南 <span class="badge">PITFALLS</span></h2>
+
+    <h3>1. 野指针与内存泄漏</h3>
+    <div class="card">
+      <p><span class="tag red">高频</span></p>
+<pre><span class="cmt">// ❌ 野指针：delete 后继续使用</span>
+<span class="type">int</span>* p = <span class="kw">new</span> <span class="type">int</span>(<span class="num">42</span>);
+<span class="kw">delete</span> p;
+<span class="cmt">// *p;  // 未定义行为</span>
+
+<span class="cmt">// ❌ 内存泄漏：new 后忘记 delete</span>
+<span class="type">int</span>* q = <span class="kw">new</span> <span class="type">int</span>[<span class="num">100</span>];
+<span class="cmt">// ... 没有 delete[] q;</span>
+
+<span class="cmt">// ✅ 正确：智能指针自动管理</span>
+<span class="kw">auto</span> sp = <span class="type">std::make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="num">42</span>);</pre>
+      <p><strong>对策：</strong>默认使用智能指针；必须使用裸指针时，遵循 RAII，确保每个 <code>new</code> 都有配对的 <code>delete</code>（或 <code>new[]</code> / <code>delete[]</code>），并尽早将所有权移入 RAII 对象[reference:16]。</p>
+    </div>
+
+    <h3>2. 字符串比较用 == 比较地址</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 比较的是两个数组的首地址，不是内容</span>
+<span class="type">char</span> a[] = <span class="str">"hello"</span>;
+<span class="type">char</span> b[] = <span class="str">"hello"</span>;
+<span class="kw">if</span> (a == b) { <span class="cmt">/* 永远为 false */</span> }
+
+<span class="cmt">// ✅ 使用 std::string</span>
+<span class="type">std::string</span> s1 = <span class="str">"hello"</span>, s2 = <span class="str">"hello"</span>;
+<span class="kw">if</span> (s1 == s2) { <span class="cmt">/* 正确比较内容 */</span> }</pre>
+      <p><strong>对策：</strong>在 C++ 中优先使用 <code>std::string</code>，避免 C 风格字符数组带来的缓冲区溢出和比较陷阱[reference:17]。</p>
+    </div>
+
+    <h3>3. 对象切片（Object Slicing）</h3>
+    <div class="card">
+<pre><span class="kw">struct</span> Animal { <span class="kw">virtual void</span> speak() { <span class="type">std::cout</span> &lt;&lt; <span class="str">"Animal\n"</span>; } };
+<span class="kw">struct</span> Dog : Animal { <span class="kw">void</span> speak() <span class="kw">override</span> { <span class="type">std::cout</span> &lt;&lt; <span class="str">"Woof\n"</span>; } };
+
+<span class="kw">void</span> <span class="fn">makeSound</span>(Animal a) { a.<span class="fn">speak</span>(); }  <span class="cmt">// ❌ 按值传递，Dog 被切片</span>
+<span class="kw">void</span> <span class="fn">makeSound</span>(Animal&amp; a) { a.<span class="fn">speak</span>(); } <span class="cmt">// ✅ 按引用传递</span></pre>
+      <p><strong>对策：</strong>多态对象通过<strong>引用或指针</strong>传递，不要按值传递基类对象来接收派生类对象[reference:18]。</p>
+    </div>
+
+    <h3>4. 浅拷贝导致双重释放</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 默认拷贝是浅拷贝，两个对象持有同一块堆内存</span>
+<span class="kw">class</span> Bad {
+    <span class="type">int</span>* data;
+<span class="kw">public</span>:
+    Bad() : data(<span class="kw">new</span> <span class="type">int</span>(<span class="num">0</span>)) {}
+    ~Bad() { <span class="kw">delete</span> data; }
+};
+<span class="cmt">// Bad b1; Bad b2 = b1;  // 双重 delete</span>
+
+<span class="cmt">// ✅ 遵循 Rule of Three/Five：自定义析构、拷贝构造、拷贝赋值</span>
+<span class="cmt">// ✅ 或使用智能指针成员，自动获得正确的拷贝/移动语义</span></pre>
+      <p><strong>对策：</strong>管理资源（裸指针、文件句柄等）的类应遵循 <strong>Rule of Three/Five</strong>：如果需要自定义析构函数，通常也需要自定义拷贝构造函数和拷贝赋值运算符（以及移动版本）。更简单的做法是使用智能指针或标准容器作为成员，让编译器生成的默认操作就是正确的[reference:19]。</p>
+    </div>
+
+    <h3>5. 容器迭代器失效</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ vector 循环中 erase 后继续使用旧迭代器</span>
+<span class="kw">for</span> (<span class="kw">auto</span> it = v.<span class="fn">begin</span>(); it != v.<span class="fn">end</span>(); ++it) {
+    <span class="kw">if</span> (cond) v.<span class="fn">erase</span>(it); <span class="cmt">// it 失效，下一轮 ++it 未定义</span>
+}
+
+<span class="cmt">// ✅ 使用 erase 的返回值</span>
+<span class="kw">for</span> (<span class="kw">auto</span> it = v.<span class="fn">begin</span>(); it != v.<span class="fn">end</span>(); ) {
+    <span class="kw">if</span> (cond) it = v.<span class="fn">erase</span>(it);
+    <span class="kw">else</span> ++it;
+}</pre>
+      <p><strong>对策：</strong>删除元素时使用 <code>it = v.erase(it)</code>；在插入/删除后重新获取迭代器。详情见下一节“迭代器失效规则”。</p>
+    </div>
+  </section>
+
+  <!-- ========== 迭代器失效 ========== -->
+  <section id="iterator-invalidation">
+    <h2>迭代器失效规则速查 <span class="badge">REFERENCE</span></h2>
+    <p>不同容器在不同操作下的迭代器、指针和引用失效规则不同。使用失效的迭代器是<strong>未定义行为</strong>，必须严格遵守规则[reference:21]。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>容器</th>
+            <th>插入操作</th>
+            <th>删除操作</th>
+            <th>其他</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><code>vector</code></strong></td>
+            <td>若触发扩容，<strong>所有</strong>迭代器/指针/引用失效；否则仅插入位置之后的失效</td>
+            <td><code>erase(p)</code> 使 <strong>p 及之后的所有</strong>迭代器/指针/引用失效；<code>pop_back</code> 仅使指向被删元素的失效</td>
+            <td><code>reserve</code>/<code>resize</code> 导致扩容时全部失效；<code>clear</code> 全部失效</td>
+          </tr>
+          <tr>
+            <td><strong><code>deque</code></strong></td>
+            <td>在<strong>首尾</strong>插入可能使迭代器失效但引用通常保持有效；在<strong>中间</strong>插入使所有迭代器/引用失效</td>
+            <td>在首尾删除仅使指向被删元素的失效；中间删除使全部失效</td>
+            <td>规则较复杂，保守做法是操作后重新获取</td>
+          </tr>
+          <tr>
+            <td><strong><code>list</code></strong></td>
+            <td>插入<strong>不使任何</strong>迭代器失效</td>
+            <td><code>erase(p)</code> <strong>仅使 p</strong> 失效，其他不受影响</td>
+            <td>这是 list 的核心优势之一</td>
+          </tr>
+          <tr>
+            <td><strong><code>map</code> / <code>set</code></strong></td>
+            <td>插入<strong>不使任何</strong>迭代器失效</td>
+            <td><code>erase</code> <strong>仅使指向被删元素</strong>的迭代器失效</td>
+            <td>红黑树结构稳定，其余节点不受影响</td>
+          </tr>
+          <tr>
+            <td><strong><code>unordered_map</code> / <code>unordered_set</code></strong></td>
+            <td>若触发 <strong>rehash</strong>（负载因子超限），<strong>所有</strong>迭代器失效；否则通常不失效</td>
+            <td><code>erase</code> 仅使指向被删元素的失效</td>
+            <td><code>rehash</code> 可手动触发，使全部失效</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout danger">
+      <strong>铁律：</strong>任何可能导致迭代器失效的操作之后，如果还需要继续使用迭代器，必须重新获取（<code>begin()</code>、<code>find()</code> 等），或使用操作返回的新迭代器。不要试图“修补”旧迭代器。
+    </div>
+  </section>
+
+  <!-- ========== 编程规范 ========== -->
+  <section id="style">
+    <h2>编程规范核心要点 <span class="badge">STYLE</span></h2>
+    <p>以下要点提炼自 Google C++ Style Guide，兼顾可读性、一致性与可维护性。</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>命名约定</h4>
+        <ul>
+          <li><strong>文件名</strong>：全小写，用下划线分隔，如 <code>my_class.cc</code> / <code>my_class.h</code>。</li>
+          <li><strong>类型名</strong>：大驼峰，如 <code>MyClass</code>、<code>HttpRequest</code>。</li>
+          <li><strong>变量名</strong>：小写 + 下划线，如 <code>table_name</code>；类成员变量末尾加下划线，如 <code>table_name_</code>。</li>
+          <li><strong>函数名</strong>：大驼峰（Google 风格），如 <code>DoSomething()</code>；访问器可用 <code>get_xxx()</code> / <code>set_xxx()</code>。</li>
+          <li><strong>常量</strong>：<code>k</code> 前缀 + 大驼峰，如 <code>kMaxBufferSize</code>。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>头文件</h4>
+        <ul>
+          <li>所有头文件必须使用 <code>#define</code> 保护宏，防止重复包含。</li>
+          <li>保护宏格式：<code>&lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</code>。</li>
+          <li>头文件包含顺序：相关头文件 → C 系统头 → C++ 标准库头 → 其他库头 → 项目内头。</li>
+          <li>尽量使用前向声明替代不必要的 <code>#include</code>，减少编译依赖。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>作用域与函数</h4>
+        <ul>
+          <li>鼓励使用匿名命名空间或 <code>static</code> 限制内部链接。</li>
+          <li>仅在函数较小时使用 <code>inline</code>；不要为了“性能”盲目 inline。</li>
+          <li>函数参数顺序：输入参数在前，输出参数在后。</li>
+          <li>变量在使用前才声明，并<strong>立即初始化</strong>。</li>
+          <li>避免使用全局 <code>using namespace std;</code>，尤其是在头文件中。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>类与资源管理</h4>
+        <ul>
+          <li>构造函数应轻量，复杂初始化放在 <code>Init()</code> 方法中（Google 建议）。</li>
+          <li>优先使用 <code>explicit</code> 修饰单参数构造函数，防止意外隐式转换。</li>
+          <li>资源管理遵循 RAII；优先使用智能指针和标准容器。</li>
+          <li>能用 <code>unique_ptr</code> 就不用 <code>shared_ptr</code>。</li>
+          <li>移动操作标记 <code>noexcept</code>。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>注释</h4>
+        <ul>
+          <li>注释解释 <strong>“为什么”</strong>，而不是“做什么”（代码本身说明做什么）。</li>
+          <li>每个类的声明前应有注释说明用途和用法。</li>
+          <li>对非显而易见的边界条件、所有权转移、线程假设必须注释。</li>
+          <li>不要保留被注释掉的代码；版本控制会保存历史。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>安全与可读性</h4>
+        <ul>
+          <li>避免 <code>goto</code>（极少数跳出多层循环的场景除外）。</li>
+          <li>使用 <code>nullptr</code> 而非 <code>NULL</code> 或 <code>0</code>。</li>
+          <li>用 <code>const</code> 修饰不修改的变量、参数和成员函数。</li>
+          <li>用 <code>auto</code> 简化复杂类型声明，但不要滥用导致可读性下降。</li>
+          <li>优先使用 <code>std::array</code>/<code>std::vector</code> 替代原生数组。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 头文件速查 ========== -->
+  <section id="cheatsheet">
+    <h2>头文件速查表 <span class="badge">CHEATSHEET</span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>头文件</th><th>提供的内容</th><th>常用项</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&lt;iostream&gt;</code></td><td>标准输入输出流</td><td><code>std::cin</code>、<code>std::cout</code>、<code>std::cerr</code>、<code>std::endl</code></td></tr>
+          <tr><td><code>&lt;string&gt;</code></td><td>字符串类</td><td><code>std::string</code>、<code>std::to_string</code>、<code>std::stoi</code></td></tr>
+          <tr><td><code>&lt;vector&gt;</code></td><td>动态数组</td><td><code>std::vector</code></td></tr>
+          <tr><td><code>&lt;deque&gt;</code></td><td>双端队列</td><td><code>std::deque</code></td></tr>
+          <tr><td><code>&lt;list&gt;</code></td><td>双向链表</td><td><code>std::list</code></td></tr>
+          <tr><td><code>&lt;map&gt;</code></td><td>有序键值对</td><td><code>std::map</code>、<code>std::multimap</code></td></tr>
+          <tr><td><code>&lt;set&gt;</code></td><td>有序集合</td><td><code>std::set</code>、<code>std::multiset</code></td></tr>
+          <tr><td><code>&lt;unordered_map&gt;</code></td><td>哈希键值对</td><td><code>std::unordered_map</code></td></tr>
+          <tr><td><code>&lt;unordered_set&gt;</code></td><td>哈希集合</td><td><code>std::unordered_set</code></td></tr>
+          <tr><td><code>&lt;algorithm&gt;</code></td><td>算法</td><td><code>sort</code>、<code>find</code>、<code>reverse</code>、<code>binary_search</code>、<code>lower_bound</code>、<code>unique</code></td></tr>
+          <tr><td><code>&lt;numeric&gt;</code></td><td>数值算法</td><td><code>accumulate</code>、<code>inner_product</code>、<code>partial_sum</code></td></tr>
+          <tr><td><code>&lt;memory&gt;</code></td><td>智能指针与内存工具</td><td><code>unique_ptr</code>、<code>shared_ptr</code>、<code>weak_ptr</code>、<code>make_unique</code>、<code>make_shared</code></td></tr>
+          <tr><td><code>&lt;utility&gt;</code></td><td>工具</td><td><code>std::pair</code>、<code>std::move</code>、<code>std::forward</code>、<code>std::swap</code></td></tr>
+          <tr><td><code>&lt;functional&gt;</code></td><td>函数对象</td><td><code>std::function</code>、<code>std::bind</code>、<code>std::ref</code>、<code>std::hash</code></td></tr>
+          <tr><td><code>&lt;thread&gt;</code></td><td>线程</td><td><code>std::thread</code>、<code>std::this_thread</code></td></tr>
+          <tr><td><code>&lt;mutex&gt;</code></td><td>互斥量</td><td><code>std::mutex</code>、<code>std::lock_guard</code>、<code>std::unique_lock</code></td></tr>
+          <tr><td><code>&lt;atomic&gt;</code></td><td>原子操作</td><td><code>std::atomic</code>、<code>std::atomic_flag</code></td></tr>
+          <tr><td><code>&lt;fstream&gt;</code></td><td>文件 I/O</td><td><code>std::ifstream</code>、<code>std::ofstream</code>、<code>std::fstream</code></td></tr>
+          <tr><td><code>&lt;chrono&gt;</code></td><td>时间</td><td><code>std::chrono::steady_clock</code>、<code>duration</code>、<code>time_point</code></td></tr>
+          <tr><td><code>&lt;cassert&gt;</code></td><td>断言</td><td><code>assert</code></td></tr>
+          <tr><td><code>&lt;cmath&gt;</code></td><td>数学函数</td><td><code>std::sqrt</code>、<code>std::pow</code>、<code>std::abs</code>、<code>std::sin</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    C++ 学习指南 Wiki · 基于公开学习资源与编码规范整理 · 内容以 C++17 为基准，部分特性需 C++11/14/17/20 支持
+  </footer>
+</main>
+
+<button class="menu-toggle" id="menuToggle" aria-label="切换导航">☰</button>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 移动端侧边栏切换 ---------- */
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menuToggle');
+
+  toggle.addEventListener('click', function () {
+    sidebar.classList.toggle('open');
+  });
+
+  /* 点击导航链接后关闭侧边栏（移动端） */
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 900) sidebar.classList.remove('open');
+    });
+  });
+
+  /* ---------- 滚动高亮当前章节 ---------- */
+  const navLinks = Array.from(sidebar.querySelectorAll('a[href^="#"]'));
+  const sections = navLinks
+    .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+    .filter(Boolean);
+
+  function updateActive() {
+    let currentId = '';
+    const fromTop = window.scrollY + 100;
+
+    sections.forEach(function (sec) {
+      if (sec.offsetTop <= fromTop) currentId = sec.id;
+    });
+
+    navLinks.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + currentId);
+    });
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        updateActive();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  updateActive();
+
+  /* ---------- 页面内搜索过滤 ---------- */
+  const input = document.getElementById('searchInput');
+  const sectionsAll = Array.from(document.querySelectorAll('main section'));
+  const cardsAll = Array.from(document.querySelectorAll('.card'));
+
+  function clearHighlights() {
+    document.querySelectorAll('.search-hidden').forEach(function (el) {
+      el.classList.remove('search-hidden');
+    });
+  }
+
+  function performSearch() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+
+    if (!q) return;
+
+    /* 在 section 层面过滤：如果整个 section 不含关键词，隐藏它 */
+    sectionsAll.forEach(function (sec) {
+      const text = sec.textContent.toLowerCase();
+      if (!text.includes(q)) {
+        sec.classList.add('search-hidden');
+        return;
+      }
+
+      /* section 命中：进一步过滤内部的 card（如果 section 内有 card 且关键词不在某些 card 中） */
+      const cards = sec.querySelectorAll('.card');
+      if (cards.length > 0) {
+        let anyCardHit = false;
+        cards.forEach(function (card) {
+          const cardText = card.textContent.toLowerCase();
+          if (cardText.includes(q)) {
+            card.classList.remove('search-hidden');
+            anyCardHit = true;
+          } else {
+            /* 不隐藏 card，因为可能表格或段落命中 */
+          }
+        });
+      }
+    });
+  }
+
+  let searchTimer;
+  input.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(performSearch, 160);
+  });
+
+  /* 按 Esc 清空搜索 */
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      input.value = '';
+      clearHighlights();
+    }
+  });
+})();
+</script>
+</body>
+</html>

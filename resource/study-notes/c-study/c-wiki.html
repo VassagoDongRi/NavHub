@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C 语言学习指南 Wiki</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #273449;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #818cf8;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --radius: 12px;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ========== 侧边栏 ========== */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    padding: 24px 0;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sidebar-header h1 span { color: var(--accent); }
+
+  .sidebar-header p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .nav-group { margin-bottom: 8px; }
+
+  .nav-group-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 8px 20px 4px;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 6px 20px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .sidebar a:hover,
+  .sidebar a.active {
+    color: var(--text);
+    background: rgba(56, 189, 248, 0.08);
+    border-left-color: var(--accent);
+  }
+
+  /* ========== 主内容 ========== */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px 80px;
+    max-width: 1100px;
+  }
+
+  .search-bar {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 12px 0 16px;
+    z-index: 50;
+    margin-bottom: 8px;
+  }
+
+  .search-bar input {
+    width: 100%;
+    max-width: 480px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-bar input:focus { border-color: var(--accent); }
+  .search-bar input::placeholder { color: var(--muted); }
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+  }
+
+  section {
+    margin-bottom: 48px;
+    scroll-margin-top: 80px;
+  }
+
+  section > h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  section > h2 .badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: var(--accent);
+  }
+
+  h4 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin: 16px 0 6px;
+    color: var(--text);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 12px 0 18px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  thead { background: var(--surface-2); }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(56, 189, 248, 0.04); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: rgba(56, 189, 248, 0.08);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  td code { background: transparent; padding: 0; }
+
+  pre {
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin: 10px 0 16px;
+    color: #cbd5e1;
+  }
+
+  pre .kw { color: #c084fc; }
+  pre .type { color: #38bdf8; }
+  pre .str { color: #34d399; }
+  pre .num { color: #fbbf24; }
+  pre .cmt { color: #64748b; font-style: italic; }
+  pre .fn { color: #fbbf24; }
+
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(56, 189, 248, 0.06);
+    padding: 12px 16px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 12px 0;
+    font-size: 0.88rem;
+  }
+
+  .callout.warn {
+    border-left-color: var(--amber);
+    background: rgba(251, 191, 36, 0.06);
+  }
+
+  .callout.danger {
+    border-left-color: var(--red);
+    background: rgba(248, 113, 113, 0.06);
+  }
+
+  .callout strong { color: var(--text); }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  .tag.green { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+  .tag.amber { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+  .tag.red { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+  .tag.blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+
+  .timeline { position: relative; padding-left: 24px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 22px 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 7px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .timeline-item h4 { margin-top: 0; color: var(--accent); }
+
+  .timeline-item .stage-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  ul, ol { padding-left: 22px; margin: 8px 0 14px; }
+
+  li { margin-bottom: 5px; font-size: 0.9rem; }
+
+  li code { font-size: 0.8rem; }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .search-hidden { display: none !important; }
+
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      transition: left 0.25s;
+    }
+
+    .sidebar.open { left: 0; }
+
+    .main { padding: 24px 20px 80px; }
+
+    .page-title { font-size: 1.5rem; }
+
+    .menu-toggle { display: flex; }
+
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ==================== 侧边栏 ==================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>C <span>Wiki</span></h1>
+    <p>学习指南 · 速查手册</p>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">入门</div>
+    <a href="#roadmap">学习路线图</a>
+    <a href="#env">开发环境与工具</a>
+    <a href="#hello">程序结构与编译流程</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">核心语法</div>
+    <a href="#types">数据类型与变量</a>
+    <a href="#operators">运算符与表达式</a>
+    <a href="#control">流程控制</a>
+    <a href="#function">函数</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">指针与内存</div>
+    <a href="#pointer">指针基础</a>
+    <a href="#memory">动态内存管理</a>
+    <a href="#array">数组与字符串</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">复合类型</div>
+    <a href="#struct">结构体与联合体</a>
+    <a href="#typedef-enum">typedef 与枚举</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">标准库</div>
+    <a href="#stdio">stdio.h 输入输出</a>
+    <a href="#stdlib">stdlib.h 通用工具</a>
+    <a href="#string-h">string.h 字符串处理</a>
+    <a href="#math-ctype">math.h 与 ctype.h</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">陷阱与规范</div>
+    <a href="#pitfalls">常见陷阱</a>
+    <a href="#style">编码规范</a>
+    <a href="#cheatsheet">头文件速查</a>
+  </div>
+</aside>
+
+<!-- ==================== 主内容 ==================== -->
+<main class="main">
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜索本页内容（函数名、关键字…）" autocomplete="off">
+  </div>
+
+  <h1 class="page-title">C 语言学习指南 Wiki</h1>
+  <p class="page-subtitle">系统化 C 语言参考 · 从基础语法到指针与内存管理</p>
+
+  <!-- ========== 学习路线图 ========== -->
+  <section id="roadmap">
+    <h2>学习路线图 <span class="badge">ROADMAP</span></h2>
+    <p>以下路线面向零基础到进阶，总周期约 <strong>8–12 周</strong>。C 语言的核心难点集中在<strong>指针、内存管理与数组/字符串的边界问题</strong>，建议在这三块上多花时间动手调试。</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <h4>阶段 0 · 环境准备</h4>
+        <div class="stage-meta">0.5–1 天</div>
+        <p>安装编译器（GCC/Clang/MSVC）与编辑器，能完成“编辑 → 编译 → 运行”的闭环。理解 <code>gcc main.c -o main</code> 的含义，能读懂编译错误信息。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 1 · 语法入门</h4>
+        <div class="stage-meta">2–3 周</div>
+        <p>数据类型、变量与常量、运算符、<code>if/switch/for/while</code> 流程控制、函数定义与调用。关键产出：计算器、猜数字、九九乘法表、简易菜单程序。重点理解：整型溢出、浮点精度、<code>%</code> 取模规则。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 2 · 数组与字符串</h4>
+        <div class="stage-meta">1–2 周</div>
+        <p>一维/二维数组、C 风格字符串（以 <code>'\0'</code> 结尾）、<code>string.h</code> 常用函数、数组越界与缓冲区溢出。关键产出：冒泡排序、字符串反转、单词计数。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 3 · 指针与内存</h4>
+        <div class="stage-meta">2–3 周</div>
+        <p>指针概念、指针与数组的关系、指针作为函数参数（实现“传引用”）、函数指针、<code>malloc/free</code> 动态内存、栈与堆的区别。<strong>这是 C 语言的分水岭</strong>，建议配合调试器观察地址与内存布局。关键产出：动态数组、链表、简单的内存池。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 4 · 复合类型与模块化</h4>
+        <div class="stage-meta">1–2 周</div>
+        <p>结构体、联合体、枚举、<code>typedef</code>、多文件编译、头文件与 <code>static</code>/<code>extern</code> 链接属性。关键产出：用结构体实现学生成绩管理系统，拆分为 <code>.h</code>/<code>.c</code> 多文件。</p>
+      </div>
+
+      <div class="timeline-item">
+        <h4>阶段 5 · 进阶与实战</h4>
+        <div class="stage-meta">2–4 周</div>
+        <p>文件 I/O、预处理宏、位运算、可变参数、简单数据结构（链表/栈/队列/哈希表）。实战项目：命令行通讯录、简易文本编辑器、基于链表的任务队列。若继续深入，可学习 POSIX 系统调用与网络编程。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 开发环境 ========== -->
+  <section id="env">
+    <h2>开发环境与工具 <span class="badge">TOOLS</span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>工具</th><th>推荐选择</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>编译器</td><td>GCC / Clang / MSVC</td><td>Linux/Mac 自带 GCC 或 Clang；Windows 推荐 MinGW-w64 或 MSVC。编译时开启警告：<code>-Wall -Wextra -Wpedantic</code>。</td></tr>
+          <tr><td>编辑器/IDE</td><td>VS Code + C/C++ 扩展；CLion</td><td>VS Code 轻量；CLion 对 C/C++ 支持完善但付费。初学也可直接用 Code::Blocks 或 Dev-C++。</td></tr>
+          <tr><td>构建系统</td><td>Make / CMake</td><td>小项目用 <code>Makefile</code> 即可；多文件项目建议 CMake。至少掌握基本编译命令与多文件链接。</td></tr>
+          <tr><td>调试器</td><td>GDB / LLDB</td><td>C 语言调试能力至关重要。熟练使用 <code>break</code>、<code>next</code>、<code>step</code>、<code>print</code>、<code>x</code>（查看内存）等命令。</td></tr>
+          <tr><td>内存检查</td><td>Valgrind、AddressSanitizer</td><td>Valgrind（Linux）可检测内存泄漏与非法访问；编译时加 <code>-fsanitize=address</code> 可快速定位越界与 use-after-free。</td></tr>
+          <tr><td>静态分析</td><td>clang-tidy、cppcheck</td><td>发现未初始化变量、数组越界、内存泄漏等潜在问题。建议接入编辑器实时提示。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========== 程序结构与编译 ========== -->
+  <section id="hello">
+    <h2>程序结构与编译流程 <span class="badge">BASICS</span></h2>
+
+    <h3>最小程序</h3>
+<pre><span class="cmt">#include &lt;stdio.h&gt;   // 预处理：引入标准输入输出头文件</span>
+
+<span class="type">int</span> <span class="fn">main</span>(<span class="type">void</span>) {
+    <span class="fn">printf</span>(<span class="str">"Hello, World!\n"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;          <span class="cmt">// 返回 0 表示正常退出</span>
+}</pre>
+
+    <h3>编译流程（四个阶段）</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>阶段</th><th>命令示意</th><th>产物</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>预处理</td><td><code>gcc -E main.c -o main.i</code></td><td><code>.i</code></td><td>展开 <code>#include</code>、<code>#define</code>，处理条件编译，删除注释。</td></tr>
+          <tr><td>编译</td><td><code>gcc -S main.i -o main.s</code></td><td><code>.s</code></td><td>将 C 代码翻译为汇编代码，进行语法与语义检查。</td></tr>
+          <tr><td>汇编</td><td><code>gcc -c main.s -o main.o</code></td><td><code>.o</code></td><td>将汇编代码翻译为机器码（目标文件），符号尚未解析。</td></tr>
+          <tr><td>链接</td><td><code>gcc main.o -o main</code></td><td>可执行文件</td><td>将目标文件与库（如 libc）合并，解析外部符号，生成最终可执行文件。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>常见编译选项：</strong><code>-Wall -Wextra</code> 开启更多警告；<code>-g</code> 生成调试信息；<code>-O2</code> 优化；<code>-std=c11</code> 指定标准；<code>-lm</code> 链接数学库（使用 <code>math.h</code> 时需要）。
+    </div>
+  </section>
+
+  <!-- ========== 数据类型 ========== -->
+  <section id="types">
+    <h2>数据类型与变量 <span class="badge">TYPES</span></h2>
+
+    <h3>基本类型</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>类型</th><th>典型大小（64 位系统）</th><th>范围 / 说明</th><th>格式符</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>char</code></td><td>1 字节</td><td>-128 ~ 127（有符号）或 0 ~ 255</td><td><code>%c</code></td></tr>
+          <tr><td><code>short</code></td><td>2 字节</td><td>通常 -32768 ~ 32767</td><td><code>%hd</code></td></tr>
+          <tr><td><code>int</code></td><td>4 字节</td><td>通常 -2^31 ~ 2^31-1</td><td><code>%d</code></td></tr>
+          <tr><td><code>long</code></td><td>4 或 8 字节</td><td>依平台而定（Windows 4 字节，Linux 64 位 8 字节）</td><td><code>%ld</code></td></tr>
+          <tr><td><code>long long</code></td><td>8 字节</td><td>至少 64 位</td><td><code>%lld</code></td></tr>
+          <tr><td><code>float</code></td><td>4 字节</td><td>约 6~7 位有效数字</td><td><code>%f</code></td></tr>
+          <tr><td><code>double</code></td><td>8 字节</td><td>约 15~16 位有效数字</td><td><code>%lf</code></td></tr>
+          <tr><td><code>long double</code></td><td>8/16 字节</td><td>依实现而定</td><td><code>%Lf</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>修饰符与常量</h3>
+    <ul>
+      <li><code>signed</code> / <code>unsigned</code>：指定符号性。无符号整型表示非负数，溢出为模运算。</li>
+      <li><code>const</code>：只读限定，修饰变量后不可修改。</li>
+      <li><code>volatile</code>：告诉编译器该变量可能被外部改变，禁止优化掉访问（嵌入式/信号处理常用）。</li>
+      <li>整型常量：十进制 <code>42</code>、八进制 <code>052</code>、十六进制 <code>0x2A</code>、二进制（C23）<code>0b101010</code>。</li>
+      <li>字符常量：<code>'A'</code>；转义：<code>'\n'</code>、<code>'\t'</code>、<code>'\\'</code>、<code>'\0'</code>。</li>
+      <li>浮点常量：<code>3.14</code>、<code>1e-9</code>、<code>1.0f</code>（float 后缀）。</li>
+    </ul>
+
+    <div class="callout warn">
+      <strong>整型溢出：</strong>有符号整型溢出是<strong>未定义行为</strong>（UB），无符号整型溢出按 2^n 取模。不要依赖溢出行为编写逻辑。比较有符号与无符号数时，有符号数会被转换为无符号，可能导致意外结果（如 <code>-1 &gt; 0u</code> 为真）。
+    </div>
+  </section>
+
+  <!-- ========== 运算符 ========== -->
+  <section id="operators">
+    <h2>运算符与表达式 <span class="badge">OPERATORS</span></h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>类别</th><th>运算符</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>算术</td><td><code>+ - * / %</code></td><td>整数除法截断；<code>%</code> 仅用于整型；负数取模结果依实现（C99 起向零截断）</td></tr>
+          <tr><td>关系</td><td><code>== != &lt; &lt;= &gt; &gt;=</code></td><td>返回 0（假）或 1（真）</td></tr>
+          <tr><td>逻辑</td><td><code>&amp;&amp; || !</code></td><td>短路求值：<code>&amp;&amp;</code> 左侧为假则不再求右侧</td></tr>
+          <tr><td>位运算</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td>按位与/或/异或/取反/左右移；左移溢出为 UB，右移有符号数实现定义</td></tr>
+          <tr><td>赋值</td><td><code>= += -= *= /= %= &amp;= |= ^= &lt;&lt;= &gt;&gt;=</code></td><td>复合赋值先运算再赋值</td></tr>
+          <tr><td>自增自减</td><td><code>++ --</code></td><td>前缀先增减后取值，后缀先取值后增减；<strong>同一表达式中对同一变量多次修改是 UB</strong></td></tr>
+          <tr><td>条件</td><td><code>? :</code></td><td>三目运算符，唯一需要三个操作数的运算符</td></tr>
+          <tr><td>逗号</td><td><code>,</code></td><td>从左到右求值，返回最右值；优先级最低</td></tr>
+          <tr><td>sizeof</td><td><code>sizeof</code></td><td>返回类型/对象占用的字节数，结果为 <code>size_t</code>（无符号）</td></tr>
+          <tr><td>取地址/解引用</td><td><code>&amp; *</code></td><td><code>&amp;</code> 取地址，<code>*</code> 解引用（详见指针章节）</td></tr>
+          <tr><td>成员访问</td><td><code>. -&gt;</code></td><td><code>.</code> 用于结构体变量，<code>-&gt;</code> 用于结构体指针</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>优先级与结合性（从高到低，常用部分）</h3>
+    <ol>
+      <li><code>()</code> <code>[]</code> <code>.</code> <code>-&gt;</code> <code>++</code>（后缀）<code>--</code>（后缀）</li>
+      <li><code>!</code> <code>~</code> <code>++</code>（前缀）<code>--</code>（前缀）<code>*</code>（解引用）<code>&amp;</code>（取地址）<code>sizeof</code></li>
+      <li><code>*</code> <code>/</code> <code>%</code></li>
+      <li><code>+</code> <code>-</code></li>
+      <li><code>&lt;&lt;</code> <code>&gt;&gt;</code></li>
+      <li><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></li>
+      <li><code>==</code> <code>!=</code></li>
+      <li><code>&amp;</code>（按位与）</li>
+      <li><code>^</code>（按位异或）</li>
+      <li><code>|</code>（按位或）</li>
+      <li><code>&amp;&amp;</code></li>
+      <li><code>||</code></li>
+      <li><code>?:</code>（右结合）</li>
+      <li><code>=</code> 及复合赋值（右结合）</li>
+      <li><code>,</code></li>
+    </ol>
+    <div class="callout">
+      <strong>建议：</strong>不要依赖优先级记忆编写复杂表达式。不确定时加括号——括号既保证正确性，也提升可读性。
+    </div>
+  </section>
+
+  <!-- ========== 流程控制 ========== -->
+  <section id="control">
+    <h2>流程控制 <span class="badge">CONTROL</span></h2>
+
+    <h3>分支</h3>
+<pre><span class="cmt">// if-else if-else</span>
+<span class="kw">if</span> (score &gt;= <span class="num">90</span>)       <span class="fn">printf</span>(<span class="str">"A\n"</span>);
+<span class="kw">else if</span> (score &gt;= <span class="num">60</span>)  <span class="fn">printf</span>(<span class="str">"B\n"</span>);
+<span class="kw">else</span>                   <span class="fn">printf</span>(<span class="str">"C\n"</span>);
+
+<span class="cmt">// switch：表达式必须是整型/枚举</span>
+<span class="kw">switch</span> (choice) {
+    <span class="kw">case</span> <span class="num">1</span>: <span class="fn">puts</span>(<span class="str">"新建"</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">2</span>: <span class="fn">puts</span>(<span class="str">"打开"</span>); <span class="kw">break</span>;
+    <span class="kw">default</span>: <span class="fn">puts</span>(<span class="str">"无效"</span>); <span class="kw">break</span>;
+}
+<span class="cmt">// 漏写 break 会导致“贯穿（fall-through）”，有时有意为之（如多个 case 共享逻辑）</span></pre>
+
+    <h3>循环</h3>
+<pre><span class="cmt">// for：已知迭代次数</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; ++i)
+    <span class="fn">printf</span>(<span class="str">"%d "</span>, i);
+
+<span class="cmt">// while：条件驱动</span>
+<span class="type">int</span> n = <span class="num">5</span>;
+<span class="kw">while</span> (n &gt; <span class="num">0</span>) { <span class="fn">printf</span>(<span class="str">"%d\n"</span>, n--); }
+
+<span class="cmt">// do-while：至少执行一次</span>
+<span class="type">int</span> input;
+<span class="kw">do</span> {
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;input);
+} <span class="kw">while</span> (input &lt; <span class="num">0</span>);   <span class="cmt">// 确保输入非负</span>
+
+<span class="cmt">// break / continue</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">100</span>; ++i) {
+    <span class="kw">if</span> (i % <span class="num">2</span> == <span class="num">0</span>) <span class="kw">continue</span>;  <span class="cmt">// 跳过偶数</span>
+    <span class="kw">if</span> (i &gt; <span class="num">10</span>) <span class="kw">break</span>;         <span class="cmt">// 超过 10 退出</span>
+}</pre>
+    <div class="callout warn">
+      <strong>常见错误：</strong><code>for</code> 循环头中写 <code>for (int i = 0; i &lt; n; i++);</code> 多了一个分号——循环体为空，后续语句只执行一次。<code>while</code> 条件中误用 <code>=</code> 而非 <code>==</code>。
+    </div>
+  </section>
+
+  <!-- ========== 函数 ========== -->
+  <section id="function">
+    <h2>函数 <span class="badge">FUNCTIONS</span></h2>
+
+    <h3>定义、声明与调用</h3>
+<pre><span class="cmt">// 函数声明（原型），放在头文件或使用前</span>
+<span class="type">int</span> <span class="fn">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+
+<span class="type">int</span> <span class="fn">main</span>(<span class="type">void</span>) {
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>));
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="cmt">// 函数定义</span>
+<span class="type">int</span> <span class="fn">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="kw">return</span> a + b;
+}</pre>
+
+    <h3>参数传递：值传递 vs 指针传递</h3>
+    <p>C 语言<strong>只有值传递</strong>。要“修改实参”，必须传入地址（指针），在函数内通过解引用修改。</p>
+<pre><span class="cmt">// ❌ 值传递：修改的是副本</span>
+<span class="kw">void</span> <span class="fn">bad_swap</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="type">int</span> t = a; a = b; b = t;   <span class="cmt">// 不影响外部</span>
+}
+
+<span class="cmt">// ✅ 指针传递：通过地址修改原变量</span>
+<span class="kw">void</span> <span class="fn">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
+    <span class="type">int</span> t = *a; *a = *b; *b = t;
+}
+<span class="cmt">// 调用：swap(&amp;x, &amp;y);</span></pre>
+
+    <h3>函数指针</h3>
+<pre><span class="type">int</span> <span class="fn">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="kw">return</span> a + b; }
+<span class="type">int</span> <span class="fn">mul</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="kw">return</span> a * b; }
+
+<span class="cmt">// 声明函数指针</span>
+<span class="type">int</span> (*op)(<span class="type">int</span>, <span class="type">int</span>);
+
+op = add;
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">op</span>(<span class="num">2</span>, <span class="num">3</span>));  <span class="cmt">// 5</span>
+op = mul;
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">op</span>(<span class="num">2</span>, <span class="num">3</span>));  <span class="cmt">// 6</span></pre>
+
+    <h3>递归</h3>
+<pre><span class="type">int</span> <span class="fn">factorial</span>(<span class="type">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;      <span class="cmt">// 终止条件</span>
+    <span class="kw">return</span> n * <span class="fn">factorial</span>(n - <span class="num">1</span>);
+}</pre>
+    <div class="callout">
+      <strong>递归要点：</strong>必须有明确的终止条件；递归深度过大会导致栈溢出。C 语言没有尾调用优化保证，深度递归建议改为迭代。
+    </div>
+  </section>
+
+  <!-- ========== 指针基础 ========== -->
+  <section id="pointer">
+    <h2>指针基础 <span class="badge">POINTERS</span></h2>
+    <p>指针是存储<strong>内存地址</strong>的变量。理解指针是掌握 C 语言的关键。</p>
+
+    <h3>基本操作</h3>
+<pre><span class="type">int</span> x = <span class="num">42</span>;
+<span class="type">int</span> *p = &amp;x;      <span class="cmt">// p 保存 x 的地址</span>
+
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, *p);   <span class="cmt">// 解引用：输出 42</span>
+*p = <span class="num">100</span>;            <span class="cmt">// 通过指针修改 x</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);   <span class="cmt">// 100</span>
+
+<span class="type">int</span> **pp = &amp;p;     <span class="cmt">// 指向指针的指针</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, **pp);  <span class="cmt">// 42</span></pre>
+
+    <h3>指针与数组</h3>
+    <p>数组名在大多数表达式中退化为指向首元素的指针。<code>a[i]</code> 等价于 <code>*(a + i)</code>。</p>
+<pre><span class="type">int</span> arr[<span class="num">5</span>] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+<span class="type">int</span> *p = arr;          <span class="cmt">// 等价于 &amp;arr[0]</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, *(p + <span class="num">2</span>));   <span class="cmt">// 30，等价于 arr[2]</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, p[<span class="num">3</span>]);        <span class="cmt">// 40，指针也支持下标</span>
+
+<span class="cmt">// 指针遍历数组</span>
+<span class="kw">for</span> (<span class="type">int</span> *q = arr; q &lt; arr + <span class="num">5</span>; ++q)
+    <span class="fn">printf</span>(<span class="str">"%d "</span>, *q);</pre>
+
+    <h3>指针与 const</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>写法</th><th>含义</th><th>能否改指向</th><th>能否改值</th></tr></thead>
+        <tbody>
+          <tr><td><code>const int *p</code></td><td>指向常量的指针</td><td>可以</td><td>不可以</td></tr>
+          <tr><td><code>int * const p</code></td><td>常量指针（指针本身不可改）</td><td>不可以</td><td>可以</td></tr>
+          <tr><td><code>const int * const p</code></td><td>指向常量的常量指针</td><td>不可以</td><td>不可以</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>NULL 与空指针</h3>
+<pre><span class="type">int</span> *p = <span class="kw">NULL</span>;        <span class="cmt">// 传统写法，NULL 通常是 ((void*)0) 或 0</span>
+<span class="kw">if</span> (p != <span class="kw">NULL</span>) { <span class="cmt">/* 使用前判空 */</span> }
+
+<span class="cmt">// 解引用空指针是未定义行为（通常导致段错误）</span>
+<span class="cmt">// *p;  // ❌ 崩溃</span></pre>
+    <div class="callout danger">
+      <strong>三大指针错误：</strong>① 解引用空指针；② 解引用未初始化的野指针；③ 指针越界访问（指向数组范围之外）。C 语言不会自动检查这些错误，必须靠编码纪律与工具（AddressSanitizer/Valgrind）发现。
+    </div>
+  </section>
+
+  <!-- ========== 动态内存 ========== -->
+  <section id="memory">
+    <h2>动态内存管理 <span class="badge">MEMORY</span></h2>
+    <p>栈内存由编译器自动管理，大小有限；堆内存由程序员手动申请与释放，生命周期可控。<code>#include &lt;stdlib.h&gt;</code>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>函数</th><th>功能</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>malloc(size)</code></td><td>分配 <code>size</code> 字节</td><td>返回 <code>void*</code>，未初始化；失败返回 <code>NULL</code></td></tr>
+          <tr><td><code>calloc(n, size)</code></td><td>分配 <code>n * size</code> 字节并清零</td><td>适合数组；失败返回 <code>NULL</code></td></tr>
+          <tr><td><code>realloc(p, new_size)</code></td><td>调整已分配内存大小</td><td>可能移动内存并返回新地址；失败返回 <code>NULL</code>，原内存仍有效</td></tr>
+          <tr><td><code>free(p)</code></td><td>释放 <code>p</code> 指向的内存</td><td>只能释放 <code>malloc/calloc/realloc</code> 返回的指针；<code>free(NULL)</code> 安全</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>典型用法</h3>
+<pre><span class="cmt">// 动态数组</span>
+<span class="type">int</span> n = <span class="num">10</span>;
+<span class="type">int</span> *arr = (<span class="type">int</span>*)<span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="type">int</span>));
+<span class="kw">if</span> (arr == <span class="kw">NULL</span>) {
+    <span class="fn">fprintf</span>(stderr, <span class="str">"内存分配失败\n"</span>);
+    <span class="kw">return</span> <span class="num">1</span>;
+}
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; n; ++i) arr[i] = i * i;
+
+<span class="fn">free</span>(arr);
+arr = <span class="kw">NULL</span>;          <span class="cmt">// 避免悬空指针</span>
+
+<span class="cmt">// 扩容</span>
+<span class="type">int</span> *tmp = (<span class="type">int</span>*)<span class="fn">realloc</span>(arr, <span class="num">2</span> * n * <span class="kw">sizeof</span>(<span class="type">int</span>));
+<span class="kw">if</span> (tmp != <span class="kw">NULL</span>) {
+    arr = tmp;             <span class="cmt">// 仅在成功时更新指针，避免泄漏</span>
+}</pre>
+
+    <div class="callout warn">
+      <strong>realloc 陷阱：</strong>不要写成 <code>arr = realloc(arr, ...)</code>。若 realloc 失败返回 NULL，原指针就丢失了，造成内存泄漏。应先用临时指针接收返回值，成功后再赋值。
+    </div>
+
+    <div class="callout danger">
+      <strong>常见内存错误：</strong>
+      <ul>
+        <li><strong>内存泄漏</strong>：<code>malloc</code> 后忘记 <code>free</code>。</li>
+        <li><strong>双重释放</strong>：同一指针 <code>free</code> 两次。</li>
+        <li><strong>悬空指针</strong>：<code>free</code> 后继续使用该指针。</li>
+        <li><strong>越界写</strong>：分配 <code>n</code> 字节却写入 <code>n+1</code> 字节。</li>
+        <li><strong>释放非堆指针</strong>：对栈变量或数组名调用 <code>free</code>。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== 数组与字符串 ========== -->
+  <section id="array">
+    <h2>数组与字符串 <span class="badge">ARRAYS</span></h2>
+
+    <h3>数组</h3>
+<pre><span class="cmt">// 一维数组</span>
+<span class="type">int</span> a[<span class="num">5</span>] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+<span class="type">int</span> b[<span class="num">5</span>] = {<span class="num">0</span>};            <span class="cmt">// 全部初始化为 0</span>
+
+<span class="cmt">// 二维数组</span>
+<span class="type">int</span> m[<span class="num">3</span>][<span class="num">4</span>] = {
+    {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>},
+    {<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>},
+    {<span class="num">9</span>, <span class="num">10</span>, <span class="num">11</span>, <span class="num">12</span>}
+};
+
+<span class="cmt">// 数组长度</span>
+<span class="type">size_t</span> len = <span class="kw">sizeof</span>(a) / <span class="kw">sizeof</span>(a[<span class="num">0</span>]);  <span class="cmt">// 5</span>
+
+<span class="cmt">// 遍历</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">3</span>; ++i)
+    <span class="kw">for</span> (<span class="type">int</span> j = <span class="num">0</span>; j &lt; <span class="num">4</span>; ++j)
+        <span class="fn">printf</span>(<span class="str">"%d "</span>, m[i][j]);</pre>
+
+    <h3>C 风格字符串</h3>
+    <p>字符串是以 <code>'\0'</code> 结尾的字符数组。这个结尾符是字符串函数正确工作的前提。</p>
+<pre><span class="type">char</span> s1[] = <span class="str">"hello"</span>;         <span class="cmt">// 自动加 '\0'，长度 6</span>
+<span class="type">char</span> s2[<span class="num">10</span>] = <span class="str">"hello"</span>;      <span class="cmt">// 剩余字节补 0</span>
+<span class="type">char</span> s3[<span class="num">5</span>] = <span class="str">"hello"</span>;       <span class="cmt">// ❌ 没有空间放 '\0'，不是合法字符串</span>
+
+<span class="cmt">// 字符数组逐字符初始化（注意手动加结束符）</span>
+<span class="type">char</span> s4[] = {<span class="str">'h'</span>, <span class="str">'i'</span>, <span class="str">'\0'</span>};</pre>
+
+    <h3>string.h 常用函数</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>strlen(s)</code></td><td>返回字符串长度（不含 <code>'\0'</code>）</td><td>O(n)；要求 s 以 <code>'\0'</code> 结尾</td></tr>
+          <tr><td><code>strcpy(dst, src)</code></td><td>复制字符串（含 <code>'\0'</code>）</td><td><strong>不检查 dst 容量</strong>，易溢出；优先用 <code>strncpy</code></td></tr>
+          <tr><td><code>strncpy(dst, src, n)</code></td><td>最多复制 n 个字符</td><td>若 src 长度 ≥ n，不会自动补 <code>'\0'</code>，需手动设置</td></tr>
+          <tr><td><code>strcat(dst, src)</code></td><td>将 src 追加到 dst 末尾</td><td>不检查容量；优先用 <code>strncat</code></td></tr>
+          <tr><td><code>strcmp(a, b)</code></td><td>比较字符串</td><td>相等返回 0；a&lt;b 返回负；a&gt;b 返回正</td></tr>
+          <tr><td><code>strncmp(a, b, n)</code></td><td>比较前 n 个字符</td><td>常用于前缀判断</td></tr>
+          <tr><td><code>strchr(s, c)</code></td><td>查找字符 c 首次出现位置</td><td>返回指针，未找到返回 <code>NULL</code></td></tr>
+          <tr><td><code>strstr(s, sub)</code></td><td>查找子串</td><td>返回首次出现位置指针，未找到返回 <code>NULL</code></td></tr>
+          <tr><td><code>strtok(s, delim)</code></td><td>按分隔符切分字符串</td><td>会修改原字符串；非线程安全；首次传 s，后续传 <code>NULL</code></td></tr>
+          <tr><td><code>memcpy(dst, src, n)</code></td><td>复制 n 字节内存</td><td>源与目标不可重叠；重叠用 <code>memmove</code></td></tr>
+          <tr><td><code>memmove(dst, src, n)</code></td><td>复制 n 字节内存（支持重叠）</td><td>稍慢但安全</td></tr>
+          <tr><td><code>memset(p, value, n)</code></td><td>将 n 字节设置为 value</td><td>常用于清零；对 int 数组设置为 0 才安全</td></tr>
+          <tr><td><code>memcmp(a, b, n)</code></td><td>比较 n 字节内存</td><td>返回 0 表示相同</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout danger">
+      <strong>缓冲区溢出：</strong><code>strcpy</code>/<code>strcat</code>/<code>sprintf</code> 都不检查目标缓冲区容量，是安全漏洞的常见来源。优先使用带长度限制的版本（<code>strncpy</code>、<code>strncat</code>、<code>snprintf</code>），并确保目标缓冲区足够大且以 <code>'\0'</code> 结尾。
+    </div>
+  </section>
+
+  <!-- ========== 结构体与联合体 ========== -->
+  <section id="struct">
+    <h2>结构体与联合体 <span class="badge">STRUCT</span></h2>
+
+    <h3>结构体</h3>
+<pre><span class="kw">struct</span> Student {
+    <span class="type">char</span> name[<span class="num">32</span>];
+    <span class="type">int</span> age;
+    <span class="type">float</span> score;
+};
+
+<span class="kw">struct</span> Student s1 = {<span class="str">"Alice"</span>, <span class="num">20</span>, <span class="num">92.5f</span>};
+<span class="kw">struct</span> Student s2;
+<span class="fn">strcpy</span>(s2.name, <span class="str">"Bob"</span>);
+s2.age = <span class="num">21</span>;
+s2.score = <span class="num">88.0f</span>;
+
+<span class="cmt">// 指针访问成员使用 -&gt;</span>
+<span class="kw">struct</span> Student *p = &amp;s1;
+<span class="fn">printf</span>(<span class="str">"%s, %d\n"</span>, p-&gt;name, p-&gt;age);
+
+<span class="cmt">// 结构体数组</span>
+<span class="kw">struct</span> Student cls[<span class="num">2</span>] = {
+    {<span class="str">"Alice"</span>, <span class="num">20</span>, <span class="num">92.5f</span>},
+    {<span class="str">"Bob"</span>, <span class="num">21</span>, <span class="num">88.0f</span>}
+};</pre>
+
+    <h3>内存对齐与 sizeof</h3>
+    <p>结构体成员之间可能存在填充字节（padding），以满足对齐要求。<code>sizeof(struct)</code> 可能大于各成员大小之和。</p>
+<pre><span class="kw">struct</span> A {
+    <span class="type">char</span> c;     <span class="cmt">// 1 字节</span>
+    <span class="type">int</span> i;      <span class="cmt">// 4 字节，前面通常填充 3 字节</span>
+    <span class="type">char</span> d;     <span class="cmt">// 1 字节，后面可能填充 3 字节</span>
+};
+<span class="cmt">// sizeof(struct A) 常为 12（而非 6）</span>
+
+<span class="cmt">// 调整成员顺序可减少填充：</span>
+<span class="kw">struct</span> B {
+    <span class="type">int</span> i;      <span class="cmt">// 4</span>
+    <span class="type">char</span> c;     <span class="cmt">// 1</span>
+    <span class="type">char</span> d;     <span class="cmt">// 1（+2 填充）</span>
+};
+<span class="cmt">// sizeof(struct B) 常为 8</span></pre>
+
+    <h3>联合体（union）</h3>
+    <p>所有成员共享同一块内存，大小等于最大成员的大小。同一时刻只能有效使用一个成员。</p>
+<pre><span class="kw">union</span> Value {
+    <span class="type">int</span> i;
+    <span class="type">float</span> f;
+    <span class="type">char</span> bytes[<span class="num">4</span>];
+};  <span class="cmt">// sizeof 通常为 4</span>
+
+<span class="kw">union</span> Value v;
+v.i = <span class="num">0x3f800000</span>;
+<span class="cmt">// 此时读取 v.f 是“类型双关”，C 标准对读取非活跃成员的行为有争议，</span>
+<span class="cmt">// 严谨做法是使用 memcpy 或通过 bytes 观察字节表示。</span></pre>
+    <div class="callout">
+      <strong>结构体 vs 联合体：</strong>结构体成员各占独立内存，可同时使用；联合体成员共享内存，节省空间但同一时刻只能有效使用一个。联合体常用于实现变体类型、协议解析与内存节省。
+    </div>
+  </section>
+
+  <!-- ========== typedef 与枚举 ========== -->
+  <section id="typedef-enum">
+    <h2>typedef 与枚举 <span class="badge">TYPEDEF</span></h2>
+
+    <h3>typedef</h3>
+<pre><span class="cmt">// 为类型取别名</span>
+<span class="kw">typedef</span> <span class="type">unsigned long</span> ulong;
+<span class="kw">typedef</span> <span class="type">int</span> (*BinOp)(<span class="type">int</span>, <span class="type">int</span>);  <span class="cmt">// 函数指针类型别名</span>
+
+<span class="cmt">// 与结构体组合（推荐写法）</span>
+<span class="kw">typedef struct</span> {
+    <span class="type">char</span> name[<span class="num">32</span>];
+    <span class="type">int</span> age;
+} Student;    <span class="cmt">// 使用时可直接写 Student，无需 struct 前缀</span>
+
+<span class="cmt">// 链表节点</span>
+<span class="kw">typedef struct</span> Node {
+    <span class="type">int</span> data;
+    <span class="kw">struct</span> Node *next;
+} Node;</pre>
+
+    <h3>枚举</h3>
+<pre><span class="kw">typedef enum</span> {
+    COLOR_RED,      <span class="cmt">// 默认 0</span>
+    COLOR_GREEN,    <span class="cmt">// 1</span>
+    COLOR_BLUE      <span class="cmt">// 2</span>
+} Color;
+
+<span class="cmt">// 显式赋值</span>
+<span class="kw">typedef enum</span> {
+    STATUS_OK = <span class="num">0</span>,
+    STATUS_ERR = <span class="num">-1</span>,
+    STATUS_BUSY = <span class="num">1</span>
+} Status;</pre>
+    <div class="callout">
+      <strong>枚举的本质：</strong>枚举常量是 <code>int</code> 类型（C 标准中），可以参与整型运算。用枚举代替魔法数字，可显著提升代码可读性。C23 起支持指定底层类型（<code>enum E : unsigned char</code>）。
+    </div>
+  </section>
+
+  <!-- ========== stdio ========== -->
+  <section id="stdio">
+    <h2>stdio.h 输入输出 <span class="badge">STDIO</span></h2>
+    <p><code>#include &lt;stdio.h&gt;</code></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>要点</th></tr></thead>
+        <tbody>
+          <tr><td><code>printf(fmt, ...)</code></td><td>格式化输出到 stdout</td><td>返回输出字符数，出错返回负值</td></tr>
+          <tr><td><code>fprintf(stream, fmt, ...)</code></td><td>格式化输出到指定流</td><td>错误信息建议输出到 <code>stderr</code></td></tr>
+          <tr><td><code>sprintf(buf, fmt, ...)</code></td><td>格式化输出到字符串</td><td><strong>不检查 buf 容量</strong>，推荐 <code>snprintf</code></td></tr>
+          <tr><td><code>snprintf(buf, n, fmt, ...)</code></td><td>格式化输出到字符串，最多写 n-1 个字符</td><td>总是以 <code>'\0'</code> 结尾；返回“本应写入”的长度，可用于检测截断</td></tr>
+          <tr><td><code>scanf(fmt, ...)</code></td><td>从 stdin 格式化读取</td><td>参数必须是地址；返回值是成功读取的项数</td></tr>
+          <tr><td><code>fscanf(stream, fmt, ...)</code></td><td>从文件流格式化读取</td><td>用法同 scanf</td></tr>
+          <tr><td><code>sscanf(str, fmt, ...)</code></td><td>从字符串格式化读取</td><td>常用于解析字符串中的数字</td></tr>
+          <tr><td><code>getchar()</code></td><td>读取一个字符</td><td>返回 <code>int</code>（可能为 EOF）</td></tr>
+          <tr><td><code>putchar(c)</code></td><td>输出一个字符</td><td>返回写入的字符或 EOF</td></tr>
+          <tr><td><code>fgets(buf, n, stream)</code></td><td>读取一行（最多 n-1 字符）</td><td>保留换行符；比 <code>gets</code> 安全（<code>gets</code> 已从 C11 移除）</td></tr>
+          <tr><td><code>fputs(s, stream)</code></td><td>输出字符串</td><td>不自动加换行</td></tr>
+          <tr><td><code>puts(s)</code></td><td>输出字符串到 stdout 并加换行</td><td>成功返回非负值</td></tr>
+          <tr><td><code>fopen(path, mode)</code></td><td>打开文件</td><td>失败返回 <code>NULL</code>，必须检查</td></tr>
+          <tr><td><code>fclose(fp)</code></td><td>关闭文件</td><td>成功返回 0；不关闭可能丢失缓冲区数据</td></tr>
+          <tr><td><code>fread / fwrite</code></td><td>二进制读写</td><td>参数为指针、元素大小、元素个数、流</td></tr>
+          <tr><td><code>feof / ferror</code></td><td>检测 EOF / 错误</td><td>应在读取操作<strong>之后</strong>调用</td></tr>
+          <tr><td><code>fseek / ftell / rewind</code></td><td>文件定位</td><td><code>fseek(fp, 0, SEEK_SET)</code> 回到开头</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>printf 格式符速查</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>格式符</th><th>含义</th><th>示例</th></tr></thead>
+        <tbody>
+          <tr><td><code>%d</code> / <code>%i</code></td><td>有符号十进制整数</td><td><code>printf("%d", 42)</code></td></tr>
+          <tr><td><code>%u</code></td><td>无符号十进制整数</td><td><code>printf("%u", 42u)</code></td></tr>
+          <tr><td><code>%x</code> / <code>%X</code></td><td>十六进制（小写/大写）</td><td><code>printf("%x", 255)</code> → ff</td></tr>
+          <tr><td><code>%o</code></td><td>八进制</td><td><code>printf("%o", 8)</code> → 10</td></tr>
+          <tr><td><code>%f</code> / <code>%F</code></td><td>浮点数（默认 6 位小数）</td><td><code>printf("%.2f", 3.14159)</code> → 3.14</td></tr>
+          <tr><td><code>%e</code> / <code>%E</code></td><td>科学计数法</td><td><code>printf("%e", 12345.0)</code></td></tr>
+          <tr><td><code>%g</code> / <code>%G</code></td><td>自动选择 %f 或 %e</td><td>去除多余尾零</td></tr>
+          <tr><td><code>%c</code></td><td>字符</td><td><code>printf("%c", 'A')</code></td></tr>
+          <tr><td><code>%s</code></td><td>字符串</td><td><code>printf("%s", "hi")</code></td></tr>
+          <tr><td><code>%p</code></td><td>指针地址</td><td><code>printf("%p", (void*)p)</code></td></tr>
+          <tr><td><code>%%</code></td><td>输出百分号</td><td><code>printf("100%%")</code></td></tr>
+          <tr><td><code>%ld</code> / <code>%lld</code></td><td>long / long long</td><td>按类型匹配，否则 UB</td></tr>
+          <tr><td><code>%zu</code></td><td>size_t</td><td><code>printf("%zu", sizeof(int))</code></td></tr>
+          <tr><td><code>%*d</code></td><td>宽度由参数指定</td><td><code>printf("%*d", 5, 42)</code></td></tr>
+          <tr><td><code>%-5d</code></td><td>左对齐、宽度 5</td><td><code>printf("[%-5d]", 42)</code></td></tr>
+          <tr><td><code>%05d</code></td><td>补零、宽度 5</td><td><code>printf("%05d", 42)</code> → 00042</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>scanf 陷阱：</strong>① 忘记取地址符 <code>&amp;</code>；② <code>%s</code> 不检查缓冲区容量（应指定宽度：<code>%31s</code>）；③ 格式串中的空白字符会匹配任意空白（包括换行）；④ 返回值是成功匹配的项数，应检查。读取字符串更安全的方式是 <code>fgets</code>。
+    </div>
+  </section>
+
+  <!-- ========== stdlib ========== -->
+  <section id="stdlib">
+    <h2>stdlib.h 通用工具 <span class="badge">STDLIB</span></h2>
+    <p><code>#include &lt;stdlib.h&gt;</code></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数 / 宏</th><th>功能</th><th>要点</th></tr></thead>
+        <tbody>
+          <tr><td><code>malloc / calloc / realloc / free</code></td><td>动态内存管理</td><td>见“动态内存管理”章节</td></tr>
+          <tr><td><code>atoi(s)</code></td><td>字符串转 int</td><td>无错误检测；转换失败返回 0，无法区分“0”与“非法输入”</td></tr>
+          <tr><td><code>atol / atoll / atof</code></td><td>转 long / long long / double</td><td>同上</td></tr>
+          <tr><td><code>strtol(s, &amp;end, base)</code></td><td>字符串转 long，支持进制与错误检测</td><td>推荐：<code>end</code> 指向第一个未解析字符，可检测错误；<code>errno</code> 表示溢出</td></tr>
+          <tr><td><code>strtod(s, &amp;end)</code></td><td>字符串转 double</td><td>同样支持错误检测</td></tr>
+          <tr><td><code>rand()</code></td><td>生成伪随机数 [0, RAND_MAX]</td><td>质量有限；需配合 <code>srand</code> 播种</td></tr>
+          <tr><td><code>srand(seed)</code></td><td>设置随机种子</td><td>常用 <code>srand((unsigned)time(NULL))</code></td></tr>
+          <tr><td><code>qsort(base, n, size, cmp)</code></td><td>快速排序</td><td>比较函数返回负数/0/正数</td></tr>
+          <tr><td><code>bsearch(key, base, n, size, cmp)</code></td><td>二分查找</td><td>要求数组已排序</td></tr>
+          <tr><td><code>abs / labs / llabs</code></td><td>整型绝对值</td><td>注意 <code>INT_MIN</code> 取绝对值溢出</td></tr>
+          <tr><td><code>div / ldiv</code></td><td>商与余数</td><td>返回结构体，避免两次运算</td></tr>
+          <tr><td><code>exit(status)</code></td><td>终止程序</td><td>会调用注册的 <code>atexit</code> 函数并刷新缓冲区</td></tr>
+          <tr><td><code>abort()</code></td><td>异常终止</td><td>不刷新缓冲区，产生 SIGABRT</td></tr>
+          <tr><td><code>EXIT_SUCCESS / EXIT_FAILURE</code></td><td>标准退出码</td><td>通常为 0 / 1</td></tr>
+          <tr><td><code>system(cmd)</code></td><td>执行系统命令</td><td>可移植性差，安全性需注意</td></tr>
+          <tr><td><code>getenv(name)</code></td><td>获取环境变量</td><td>未找到返回 <code>NULL</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>qsort 比较函数</h3>
+<pre><span class="cmt">// 升序比较 int</span>
+<span class="type">int</span> <span class="fn">cmp_int</span>(<span class="kw">const void</span> *a, <span class="kw">const void</span> *b) {
+    <span class="type">int</span> x = *(<span class="kw">const int</span>*)a;
+    <span class="type">int</span> y = *(<span class="kw">const int</span>*)b;
+    <span class="kw">return</span> (x &gt; y) - (x &lt; y);   <span class="cmt">// 避免减法溢出，返回 -1/0/1</span>
+}
+
+<span class="type">int</span> arr[] = {<span class="num">5</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">1</span>, <span class="num">9</span>};
+<span class="type">size_t</span> n = <span class="kw">sizeof</span>(arr) / <span class="kw">sizeof</span>(arr[<span class="num">0</span>]);
+<span class="fn">qsort</span>(arr, n, <span class="kw">sizeof</span>(<span class="type">int</span>), cmp_int);</pre>
+    <div class="callout">
+      <strong>比较函数返回值：</strong>应返回负值（a 在前）、0（相等）、正值（b 在前）。直接写 <code>return x - y;</code> 在极端值下可能整型溢出，推荐用 <code>(x &gt; y) - (x &lt; y)</code> 的写法。
+    </div>
+  </section>
+
+  <!-- ========== string.h ========== -->
+  <section id="string-h">
+    <h2>string.h 字符串处理 <span class="badge">STRING</span></h2>
+    <p><code>#include &lt;string.h&gt;</code> · 函数清单已在“数组与字符串”章节列出，此处补充典型用法。</p>
+
+    <h3>安全复制与拼接</h3>
+<pre><span class="type">char</span> dst[<span class="num">16</span>];
+<span class="type">const char</span> *src = <span class="str">"hello"</span>;
+
+<span class="cmt">// strncpy：最多复制 n 个字符，但不保证 '\0'</span>
+<span class="fn">strncpy</span>(dst, src, <span class="kw">sizeof</span>(dst) - <span class="num">1</span>);
+dst[<span class="kw">sizeof</span>(dst) - <span class="num">1</span>] = <span class="str">'\0'</span>;   <span class="cmt">// 手动保证结尾</span>
+
+<span class="cmt">// snprintf 更直观：最多写入 size-1 个字符并保证 '\0'</span>
+<span class="fn">snprintf</span>(dst, <span class="kw">sizeof</span>(dst), <span class="str">"%s"</span>, src);</pre>
+
+    <h3>strtok 切分字符串</h3>
+<pre><span class="type">char</span> line[] = <span class="str">"apple,banana,cherry"</span>;
+<span class="type">char</span> *token = <span class="fn">strtok</span>(line, <span class="str">","</span>);
+<span class="kw">while</span> (token != <span class="kw">NULL</span>) {
+    <span class="fn">printf</span>(<span class="str">"%s\n"</span>, token);
+    token = <span class="fn">strtok</span>(<span class="kw">NULL</span>, <span class="str">","</span>);   <span class="cmt">// 后续传 NULL</span>
+}</pre>
+    <div class="callout warn">
+      <strong>strtok 的副作用：</strong>它会就地修改原字符串（将分隔符替换为 <code>'\0'</code>），因此不能用于字符串字面量或 <code>const</code> 字符串。它使用内部静态状态，<strong>不可重入、非线程安全</strong>。多线程或需要保留原串时，使用 <code>strtok_r</code>（POSIX）或手动解析。
+    </div>
+  </section>
+
+  <!-- ========== math / ctype ========== -->
+  <section id="math-ctype">
+    <h2>math.h 与 ctype.h <span class="badge">UTILS</span></h2>
+
+    <h3>math.h 常用函数</h3>
+    <p><code>#include &lt;math.h&gt;</code> · 编译时需链接数学库：<code>gcc main.c -lm</code>。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td><code>sqrt(x)</code> / <code>cbrt(x)</code></td><td>平方根 / 立方根</td><td>负数开方返回 NaN</td></tr>
+          <tr><td><code>pow(x, y)</code></td><td>x 的 y 次幂</td><td>返回值可能为 inf 或 NaN</td></tr>
+          <tr><td><code>exp(x)</code> / <code>log(x)</code> / <code>log10(x)</code></td><td>指数 / 自然对数 / 常用对数</td><td>log 参数须 &gt; 0</td></tr>
+          <tr><td><code>fabs(x)</code></td><td>浮点绝对值</td><td>整型用 <code>abs</code></td></tr>
+          <tr><td><code>floor(x)</code> / <code>ceil(x)</code></td><td>向下/向上取整</td><td>返回 double</td></tr>
+          <tr><td><code>round(x)</code></td><td>四舍五入</td><td>远离零方向</td></tr>
+          <tr><td><code>fmod(x, y)</code></td><td>浮点取余</td><td>符号随 x</td></tr>
+          <tr><td><code>sin / cos / tan</code></td><td>三角函数</td><td>参数为弧度</td></tr>
+          <tr><td><code>isnan(x)</code> / <code>isinf(x)</code></td><td>检测 NaN / 无穷</td><td>浮点比较不应直接用 <code>==</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>ctype.h 字符分类与转换</h3>
+    <p><code>#include &lt;ctype.h&gt;</code> · 参数为 <code>int</code>（通常传入 <code>unsigned char</code> 或 EOF）。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>函数</th><th>功能</th></tr></thead>
+        <tbody>
+          <tr><td><code>isalpha(c)</code></td><td>是否为字母</td></tr>
+          <tr><td><code>isdigit(c)</code></td><td>是否为数字</td></tr>
+          <tr><td><code>isalnum(c)</code></td><td>是否为字母或数字</td></tr>
+          <tr><td><code>isspace(c)</code></td><td>是否为空白字符（空格、制表、换行等）</td></tr>
+          <tr><td><code>isupper(c)</code> / <code>islower(c)</code></td><td>是否为大写 / 小写字母</td></tr>
+          <tr><td><code>ispunct(c)</code></td><td>是否为标点符号</td></tr>
+          <tr><td><code>toupper(c)</code> / <code>tolower(c)</code></td><td>转大写 / 小写</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>浮点比较：</strong>不要直接用 <code>==</code> 比较浮点数。应使用容差：<code>fabs(a - b) &lt; 1e-9</code>。NaN 与任何值（包括自身）比较都为假，需用 <code>isnan</code> 检测。
+    </div>
+  </section>
+
+  <!-- ========== 常见陷阱 ========== -->
+  <section id="pitfalls">
+    <h2>常见陷阱与避坑指南 <span class="badge">PITFALLS</span></h2>
+
+    <h3>1. 数组越界与缓冲区溢出</h3>
+    <div class="card">
+      <p><span class="tag red">高频</span></p>
+<pre><span class="cmt">// ❌ 经典越界：i &lt;= 10 访问 arr[10]，合法下标是 0~9</span>
+<span class="type">int</span> arr[<span class="num">10</span>];
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt;= <span class="num">10</span>; ++i) arr[i] = i;
+
+<span class="cmt">// ❌ 缓冲区溢出</span>
+<span class="type">char</span> buf[<span class="num">8</span>];
+<span class="fn">strcpy</span>(buf, <span class="str">"this is too long"</span>);   <span class="cmt">// 溢出</span>
+
+<span class="cmt">// ✅ 使用 snprintf 与边界检查</span>
+<span class="fn">snprintf</span>(buf, <span class="kw">sizeof</span>(buf), <span class="str">"%s"</span>, <span class="str">"safe"</span>);</pre>
+      <p><strong>对策：</strong>循环边界用 <code>&lt;</code> 而非 <code>&lt;=</code>；所有写入缓冲区的操作都要检查容量；编译时开启 <code>-fsanitize=address</code> 运行测试。</p>
+    </div>
+
+    <h3>2. 忘记初始化</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 局部变量未初始化，值不确定</span>
+<span class="type">int</span> sum;
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; ++i) sum += i;   <span class="cmt">// UB</span>
+
+<span class="cmt">// ✅ 声明即初始化</span>
+<span class="type">int</span> sum = <span class="num">0</span>;</pre>
+      <p><strong>对策：</strong>变量声明时立即初始化；结构体用 <code>= {0}</code> 清零；数组用 <code>= {0}</code>。编译器 <code>-Wuninitialized</code>（含于 <code>-Wall</code>）可发现部分问题。</p>
+    </div>
+
+    <h3>3. 指针与内存错误</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 悬空指针</span>
+<span class="type">int</span> *p = (<span class="type">int</span>*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="type">int</span>));
+<span class="fn">free</span>(p);
+<span class="cmt">// *p = 10;  // 未定义行为</span>
+
+<span class="cmt">// ❌ 内存泄漏</span>
+<span class="type">int</span> *q = (<span class="type">int</span>*)<span class="fn">malloc</span>(<span class="num">100</span> * <span class="kw">sizeof</span>(<span class="type">int</span>));
+q = <span class="kw">NULL</span>;   <span class="cmt">// 原地址丢失，泄漏</span>
+
+<span class="cmt">// ✅ free 后置空；realloc 用临时指针</span>
+<span class="fn">free</span>(p);
+p = <span class="kw">NULL</span>;</pre>
+      <p><strong>对策：</strong><code>free</code> 后立即将指针置 <code>NULL</code>；每对 <code>malloc</code> 都要有配对的 <code>free</code>，并让申请与释放尽量靠近同一作用域；使用 Valgrind/ASan 检测。</p>
+    </div>
+
+    <h3>4. 字符串与字符数组混淆</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 没有 '\0' 结尾，strlen/printf 越界读取</span>
+<span class="type">char</span> s[<span class="num">3</span>] = {<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>};
+<span class="fn">printf</span>(<span class="str">"%s"</span>, s);   <span class="cmt">// 行为未定义</span>
+
+<span class="cmt">// ✅ 留出结束符空间</span>
+<span class="type">char</span> s2[<span class="num">4</span>] = {<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'\0'</span>};</pre>
+      <p><strong>对策：</strong>字符数组用于字符串时必须确保有 <code>'\0'</code>；使用 <code>strncpy</code> 后手动补 <code>'\0'</code>；优先用 <code>snprintf</code> 构造字符串。</p>
+    </div>
+
+    <h3>5. 有符号与无符号混用</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 无符号数“看起来”永远大于等于 0</span>
+<span class="type">unsigned int</span> u = <span class="num">1</span>;
+<span class="type">int</span> i = <span class="num">-1</span>;
+<span class="kw">if</span> (i &lt; u) { <span class="cmt">/* 实际为假：i 被转换为无符号的大数 */</span> }
+
+<span class="cmt">// ❌ 倒序循环的经典错误</span>
+<span class="kw">for</span> (<span class="type">unsigned int</span> k = <span class="num">10</span>; k &gt;= <span class="num">0</span>; --k) { <span class="cmt">/* 死循环 */</span> }</pre>
+      <p><strong>对策：</strong>避免有符号与无符号混用；循环计数尽量用 <code>int</code> 或 <code>size_t</code> 并注意方向；编译时开启 <code>-Wsign-compare</code>。</p>
+    </div>
+
+    <h3>6. 函数返回值未检查</h3>
+    <div class="card">
+<pre><span class="cmt">// ❌ 未检查 fopen / malloc / scanf 的返回值</span>
+<span class="type">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+<span class="cmt">// 若文件不存在，fp 为 NULL，后续 fscanf 崩溃</span>
+
+<span class="cmt">// ✅ 检查</span>
+<span class="kw">if</span> (fp == <span class="kw">NULL</span>) {
+    <span class="fn">perror</span>(<span class="str">"fopen"</span>);
+    <span class="kw">return</span> <span class="num">1</span>;
+}</pre>
+      <p><strong>对策：</strong>所有可能失败的标准库函数（<code>fopen</code>、<code>malloc</code>、<code>scanf</code>、<code>fread</code> 等）都应检查返回值，并给出错误处理。</p>
+    </div>
+  </section>
+
+  <!-- ========== 编码规范 ========== -->
+  <section id="style">
+    <h2>编码规范核心要点 <span class="badge">STYLE</span></h2>
+    <p>以下要点提炼自常见 C 编码规范（Linux 内核风格、Google C 风格等），原则是<strong>一致性优先</strong>，团队内统一即可。</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>命名约定</h4>
+        <ul>
+          <li><strong>变量/函数</strong>：小写 + 下划线，如 <code>max_count</code>、<code>compute_sum()</code>（Linux 风格）；或大驼峰（Windows 风格），保持全项目一致。</li>
+          <li><strong>宏/常量</strong>：全大写 + 下划线，如 <code>MAX_BUFFER_SIZE</code>。</li>
+          <li><strong>类型名</strong>：加 <code>_t</code> 后缀或大驼峰，如 <code>size_t</code>、<code>Student</code>。</li>
+          <li>名字要有描述性，避免 <code>a</code>、<code>b</code>、<code>tmp</code>（极短作用域除外）。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>头文件与模块化</h4>
+        <ul>
+          <li>头文件必须使用 <code>#ifndef</code> / <code>#define</code> / <code>#endif</code> 保护宏（或 <code>#pragma once</code>）。</li>
+          <li>头文件中只放声明，定义（函数体、全局变量）放在 <code>.c</code> 文件。</li>
+          <li>内部函数用 <code>static</code> 限制链接属性，避免命名冲突。</li>
+          <li>头文件包含顺序：自身头文件 → 系统头 → 项目头。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>指针与内存</h4>
+        <ul>
+          <li>指针声明时尽量初始化（<code>NULL</code> 或有效地址）。</li>
+          <li><code>free</code> 后立即置 <code>NULL</code>。</li>
+          <li><code>malloc</code> 的返回值必须检查。</li>
+          <li>申请与释放放在同一函数或同一模块中，遵循“谁申请谁释放”原则。</li>
+          <li>用 <code>const</code> 修饰不修改的指针参数。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>可读性</h4>
+        <ul>
+          <li>用 <code>#define</code> 或 <code>const</code> 代替魔法数字。</li>
+          <li>复杂表达式加括号，不依赖优先级记忆。</li>
+          <li>函数保持短小，单一职责；参数不超过 5~6 个。</li>
+          <li>用 <code>goto</code> 集中清理资源是少数被接受的用法（如 Linux 内核），但不要滥用。</li>
+          <li>注释解释“为什么”，而不是“做什么”。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>预处理</h4>
+        <ul>
+          <li>宏参数和整体都要加括号：<code>#define SQUARE(x) ((x) * (x))</code>。</li>
+          <li>避免带副作用的宏参数（如 <code>SQUARE(i++)</code>）。</li>
+          <li>能用 <code>static inline</code> 函数替代宏时优先用函数（有类型检查）。</li>
+          <li>调试用 <code>#ifdef DEBUG</code> 隔离。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>编译与警告</h4>
+        <ul>
+          <li>始终开启 <code>-Wall -Wextra</code>，把警告当错误（<code>-Werror</code>）来对待。</li>
+          <li>固定 C 标准：<code>-std=c11</code> 或 <code>-std=c17</code>，避免依赖编译器扩展。</li>
+          <li>使用 <code>-fsanitize=address,undefined</code> 在测试阶段发现内存与 UB 问题。</li>
+          <li>CI 中集成静态分析（cppcheck/clang-tidy）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 头文件速查 ========== -->
+  <section id="cheatsheet">
+    <h2>头文件速查表 <span class="badge">CHEATSHEET</span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>头文件</th><th>提供的内容</th><th>常用项</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&lt;stdio.h&gt;</code></td><td>标准输入输出</td><td><code>printf</code>、<code>scanf</code>、<code>fopen</code>、<code>fgets</code>、<code>fprintf</code>、<code>snprintf</code></td></tr>
+          <tr><td><code>&lt;stdlib.h&gt;</code></td><td>通用工具</td><td><code>malloc</code>、<code>free</code>、<code>realloc</code>、<code>atoi</code>、<code>strtol</code>、<code>qsort</code>、<code>rand</code>、<code>exit</code></td></tr>
+          <tr><td><code>&lt;string.h&gt;</code></td><td>字符串与内存操作</td><td><code>strlen</code>、<code>strcpy</code>、<code>strncpy</code>、<code>strcmp</code>、<code>strstr</code>、<code>strtok</code>、<code>memcpy</code>、<code>memset</code></td></tr>
+          <tr><td><code>&lt;math.h&gt;</code></td><td>数学函数</td><td><code>sqrt</code>、<code>pow</code>、<code>fabs</code>、<code>floor</code>、<code>ceil</code>、<code>sin</code>、<code>isnan</code></td></tr>
+          <tr><td><code>&lt;ctype.h&gt;</code></td><td>字符分类</td><td><code>isdigit</code>、<code>isalpha</code>、<code>isspace</code>、<code>toupper</code>、<code>tolower</code></td></tr>
+          <tr><td><code>&lt;stdbool.h&gt;</code></td><td>布尔类型</td><td><code>bool</code>、<code>true</code>、<code>false</code></td></tr>
+          <tr><td><code>&lt;stdint.h&gt;</code></td><td>定宽整型</td><td><code>int8_t</code>、<code>uint16_t</code>、<code>int32_t</code>、<code>uint64_t</code>、<code>intptr_t</code></td></tr>
+          <tr><td><code>&lt;stddef.h&gt;</code></td><td>常用定义</td><td><code>size_t</code>、<code>ptrdiff_t</code>、<code>NULL</code>、<code>offsetof</code></td></tr>
+          <tr><td><code>&lt;limits.h&gt;</code></td><td>整型范围</td><td><code>INT_MAX</code>、<code>INT_MIN</code>、<code>CHAR_BIT</code>、<code>UINT_MAX</code></td></tr>
+          <tr><td><code>&lt;float.h&gt;</code></td><td>浮点范围与精度</td><td><code>FLT_MAX</code>、<code>DBL_EPSILON</code>、<code>DBL_DIG</code></td></tr>
+          <tr><td><code>&lt;assert.h&gt;</code></td><td>断言</td><td><code>assert</code>（定义 <code>NDEBUG</code> 后禁用）</td></tr>
+          <tr><td><code>&lt;errno.h&gt;</code></td><td>错误码</td><td><code>errno</code>、<code>EINVAL</code>、<code>ERANGE</code>、<code>strerror</code></td></tr>
+          <tr><td><code>&lt;time.h&gt;</code></td><td>时间与日期</td><td><code>time</code>、<code>clock</code>、<code>localtime</code>、<code>strftime</code>、<code>CLOCKS_PER_SEC</code></td></tr>
+          <tr><td><code>&lt;stdarg.h&gt;</code></td><td>可变参数</td><td><code>va_list</code>、<code>va_start</code>、<code>va_arg</code>、<code>va_end</code></td></tr>
+          <tr><td><code>&lt;signal.h&gt;</code></td><td>信号处理</td><td><code>signal</code>、<code>raise</code>、<code>SIGINT</code>、<code>SIGSEGV</code></td></tr>
+          <tr><td><code>&lt;locale.h&gt;</code></td><td>本地化</td><td><code>setlocale</code>、<code>LC_ALL</code></td></tr>
+          <tr><td><code>&lt;inttypes.h&gt;</code></td><td>定宽整型格式符</td><td><code>PRId32</code>、<code>PRIu64</code>、<code>SCNd64</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    C 语言学习指南 Wiki · 以 C11/C17 为基准 · 内容整理自公开学习资源与编码规范 · 持续更新
+  </footer>
+</main>
+
+<button class="menu-toggle" id="menuToggle" aria-label="切换导航">☰</button>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 移动端侧边栏切换 ---------- */
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menuToggle');
+
+  toggle.addEventListener('click', function () {
+    sidebar.classList.toggle('open');
+  });
+
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 900) sidebar.classList.remove('open');
+    });
+  });
+
+  /* ---------- 滚动高亮当前章节 ---------- */
+  const navLinks = Array.from(sidebar.querySelectorAll('a[href^="#"]'));
+  const sections = navLinks
+    .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+    .filter(Boolean);
+
+  function updateActive() {
+    let currentId = '';
+    const fromTop = window.scrollY + 100;
+
+    sections.forEach(function (sec) {
+      if (sec.offsetTop <= fromTop) currentId = sec.id;
+    });
+
+    navLinks.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + currentId);
+    });
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        updateActive();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  updateActive();
+
+  /* ---------- 页面内搜索过滤 ---------- */
+  const input = document.getElementById('searchInput');
+  const sectionsAll = Array.from(document.querySelectorAll('main section'));
+
+  function clearHighlights() {
+    document.querySelectorAll('.search-hidden').forEach(function (el) {
+      el.classList.remove('search-hidden');
+    });
+  }
+
+  function performSearch() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+
+    if (!q) return;
+
+    sectionsAll.forEach(function (sec) {
+      const text = sec.textContent.toLowerCase();
+      if (!text.includes(q)) {
+        sec.classList.add('search-hidden');
+      }
+    });
+  }
+
+  let searchTimer;
+  input.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(performSearch, 160);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      input.value = '';
+      clearHighlights();
+    }
+  });
+})();
+</script>
+</body>
+</html>

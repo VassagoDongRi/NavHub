@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>算法板子笔记.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="c-语言常用算法板子笔记">C 语言常用算法板子笔记</h1>
+<blockquote>
+<p>配套代码：<code>算法板子_常用合集.c</code>
+全局约定：<strong>图论 / 树状数组 / 线段树 / 差分 下标从 1 开始</strong>；<code>MAXN</code>、<code>MAXM</code> 按题目规模修改；<code>INF = 0x3f3f3f3f</code>。
+编译：<code>gcc -std=c11 -O2 文件名.c</code></p>
+</blockquote>
+<hr>
+<h2 id="目录">目录</h2>
+<ul>
+<li><a href="#c-%E8%AF%AD%E8%A8%80%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95%E6%9D%BF%E5%AD%90%E7%AC%94%E8%AE%B0">C 语言常用算法板子笔记</a>
+<ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#0-%E9%80%9A%E7%94%A8%E7%BA%A6%E5%AE%9A%E4%B8%8E%E5%BF%83%E6%B3%95">0. 通用约定与心法</a></li>
+<li><a href="#1-%E6%8E%92%E5%BA%8F">1. 排序</a>
+<ul>
+<li><a href="#11-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F">1.1 快速排序</a></li>
+<li><a href="#12-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F--%E6%B1%82%E9%80%86%E5%BA%8F%E5%AF%B9">1.2 归并排序 + 求逆序对</a></li>
+</ul>
+</li>
+<li><a href="#2-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">2. 二分查找</a>
+<ul>
+<li><a href="#21-%E6%95%B4%E6%95%B0%E4%BA%8C%E5%88%86%E5%B7%A6%E9%97%AD%E5%8F%B3%E5%BC%80">2.1 整数二分（左闭右开）</a></li>
+<li><a href="#22-%E5%AE%9E%E6%95%B0%E4%BA%8C%E5%88%86--%E7%AD%94%E6%A1%88%E4%BA%8C%E5%88%86">2.2 实数二分 / 答案二分</a></li>
+</ul>
+</li>
+<li><a href="#3-%E5%B9%B6%E6%9F%A5%E9%9B%86">3. 并查集</a></li>
+<li><a href="#4-%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84">4. 树状数组</a></li>
+<li><a href="#5-%E7%BA%BF%E6%AE%B5%E6%A0%91">5. 线段树</a></li>
+<li><a href="#6-%E5%9B%BE%E8%AE%BA%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F--dijkstra">6. 图论：链式前向星 + Dijkstra</a></li>
+<li><a href="#7-%E5%AD%97%E7%AC%A6%E4%B8%B2kmp">7. 字符串：KMP</a></li>
+<li><a href="#8-%E5%BF%AB%E9%80%9F%E5%B9%82--%E5%BF%AB%E9%80%9F%E4%B9%98">8. 快速幂 / 快速乘</a></li>
+<li><a href="#9-01-%E8%83%8C%E5%8C%85">9. 01 背包</a></li>
+<li><a href="#10-%E5%89%8D%E7%BC%80%E5%92%8C--%E5%B7%AE%E5%88%86">10. 前缀和 / 差分</a>
+<ul>
+<li><a href="#101-%E5%89%8D%E7%BC%80%E5%92%8C">10.1 前缀和</a></li>
+<li><a href="#102-%E5%B7%AE%E5%88%86">10.2 差分</a></li>
+<li><a href="#103-%E4%BA%8C%E7%BB%B4%E7%89%88%E5%85%AC%E5%BC%8F%E5%A4%87%E6%9F%A5">10.3 二维版（公式备查）</a></li>
+</ul>
+</li>
+<li><a href="#11-%E9%80%9F%E6%9F%A5%E8%A1%A8">11. 速查表</a></li>
+<li><a href="#12-%E6%98%93%E9%94%99%E7%82%B9%E6%80%BB%E6%B8%85%E5%8D%95">12. 易错点总清单</a></li>
+<li><a href="#13-%E5%90%8E%E7%BB%AD%E5%8F%AF%E4%BB%A5%E5%8A%A0%E8%BF%9B%E6%9D%A5%E7%9A%84%E6%9D%BF%E5%AD%90">13. 后续可以加进来的板子</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="0-通用约定与心法">0. 通用约定与心法</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>约定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>下标</td>
+<td>图论、树状数组、线段树、差分、背包：<strong>从 1 开始</strong>；快排/归并/二分：从 0 开始</td>
+</tr>
+<tr>
+<td>数组大小</td>
+<td>按上限 +5 开，防止 <code>r+1</code>、<code>i+1</code> 越界</td>
+</tr>
+<tr>
+<td>无穷大</td>
+<td>用 <code>0x3f3f3f3f</code>（约 1e9），两个相加不溢出 int</td>
+</tr>
+<tr>
+<td>中间结果</td>
+<td>乘法、计数、区间和一律用 <code>long long</code></td>
+</tr>
+<tr>
+<td>递归</td>
+<td>深度可能到 n（如快排已排序）时考虑随机化或改迭代</td>
+</tr>
+</tbody>
+</table>
+<p><strong>写板子的三个固定动作</strong></p>
+<ol>
+<li>先写递归出口 / 初始化；</li>
+<li>再写主循环；</li>
+<li>最后检查&quot;下标边界、开闭区间、是否要下传标记&quot;。</li>
+</ol>
+<hr>
+<h2 id="1-排序">1. 排序</h2>
+<h3 id="11-快速排序">1.1 快速排序</h3>
+<p><strong>思路</strong>：选基准 <code>pivot</code>，双指针从两端向中间扫，把小于基准的甩到左边、大于的甩到右边，相遇后对两段分别递归。</p>
+<p><strong>复杂度</strong>：平均 <code>O(n log n)</code>，最坏 <code>O(n²)</code>（数组已排序且取端点做基准），额外空间 <code>O(log n)</code>（递归栈）。不稳定。</p>
+<pre class="hljs"><code><div><span class="hljs-type">void</span> <span class="hljs-title function_">quickSortUP</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> {          <span class="hljs-comment">// 升序</span>
+	<span class="hljs-keyword">if</span> (l &gt;= r) <span class="hljs-keyword">return</span>;                          <span class="hljs-comment">// ① 递归出口</span>
+	<span class="hljs-type">int</span> i = l, j = r, pivot = a[(l + r) / <span class="hljs-number">2</span>];    <span class="hljs-comment">// ② 指针 + 基准</span>
+	<span class="hljs-keyword">while</span> (i &lt;= j) {                             <span class="hljs-comment">// ③ 外层循环</span>
+		<span class="hljs-keyword">while</span> (a[i] &lt; pivot) i++;                <span class="hljs-comment">// ④ 左指针右移（反转 4、5 步的比较号 → 降序）</span>
+		<span class="hljs-keyword">while</span> (a[j] &gt; pivot) j--;                <span class="hljs-comment">// ⑤ 右指针左移</span>
+		<span class="hljs-keyword">if</span> (i &lt;= j) {                            <span class="hljs-comment">// ⑥ 找到一对逆序，交换</span>
+			<span class="hljs-type">int</span> t = a[i]; a[i] = a[j]; a[j] = t;
+			i++; j--;                            <span class="hljs-comment">// ⑦ 交换后两指针向内收</span>
+		}
+	}
+	quickSortUP(a, l, j);                          <span class="hljs-comment">// ⑧ 递归左段</span>
+	quickSortUP(a, i, r);                          <span class="hljs-comment">// ⑨ 递归右段</span>
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>递归出口是 <code>l &gt;= r</code>，不是 <code>l &gt; r</code>（一个元素也要停）。</li>
+<li>递归区间是 <code>[l, j]</code> 和 <code>[i, r]</code>，<strong>不是</strong> <code>[l, i]</code>/<code>[j, r]</code>，否则会死循环。</li>
+<li>数据基本有序时把基准改成 <code>a[l + rand() % (r - l + 1)]</code> 或三数取中，防退化。</li>
+</ul>
+<h3 id="12-归并排序--求逆序对">1.2 归并排序 + 求逆序对</h3>
+<p><strong>思路</strong>：分治到单元素，合并两个有序段时统计&quot;右边先出&quot;造成的逆序。</p>
+<p><strong>复杂度</strong>：稳定 <code>O(n log n)</code>，额外空间 <code>O(n)</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-type">static</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">msortInv</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> tmp[], <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> {
+	<span class="hljs-keyword">if</span> (l &gt;= r) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	<span class="hljs-type">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>;
+	<span class="hljs-type">long</span> <span class="hljs-type">long</span> cnt = msortInv(a, tmp, l, mid) + msortInv(a, tmp, mid + <span class="hljs-number">1</span>, r);
+	<span class="hljs-type">int</span> i = l, j = mid + <span class="hljs-number">1</span>, k = l;
+	<span class="hljs-keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= r) {
+		<span class="hljs-keyword">if</span> (a[i] &lt;= a[j]) tmp[k++] = a[i++];       <span class="hljs-comment">// 取等号才是稳定排序</span>
+		<span class="hljs-keyword">else</span> { tmp[k++] = a[j++]; cnt += mid - i + <span class="hljs-number">1</span>; }  <span class="hljs-comment">// 左段剩下全和它构成逆序</span>
+	}
+	<span class="hljs-keyword">while</span> (i &lt;= mid) tmp[k++] = a[i++];
+	<span class="hljs-keyword">while</span> (j &lt;= r)   tmp[k++] = a[j++];
+	<span class="hljs-keyword">for</span> (i = l; i &lt;= r; i++) a[i] = tmp[i];
+	<span class="hljs-keyword">return</span> cnt;
+}
+
+<span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">mergeSortInv</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n)</span> {           <span class="hljs-comment">// 返回值 = 逆序对个数</span>
+	<span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	<span class="hljs-type">int</span> *tmp = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>) * n);
+	<span class="hljs-type">long</span> <span class="hljs-type">long</span> cnt = msortInv(a, tmp, <span class="hljs-number">0</span>, n - <span class="hljs-number">1</span>);
+	<span class="hljs-built_in">free</span>(tmp);
+	<span class="hljs-keyword">return</span> cnt;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>逆序对个数最大约 <code>n(n-1)/2</code>，n = 1e5 时约 5e9，<strong>必须用 <code>long long</code></strong>。</li>
+<li><code>cnt += mid - i + 1</code> 的含义：右段 <code>a[j]</code> 先出，左段从 <code>i</code> 到 <code>mid</code> 都严格大于它。</li>
+</ul>
+<hr>
+<h2 id="2-二分查找">2. 二分查找</h2>
+<h3 id="21-整数二分左闭右开">2.1 整数二分（左闭右开）</h3>
+<p><strong>记住一个模板就够</strong>：找&quot;第一个满足条件的位置&quot;，<code>l</code> 是答案，<code>r</code> 是永远不满足的哨兵。</p>
+<pre class="hljs"><code><div><span class="hljs-type">int</span> <span class="hljs-title function_">lowerBound</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> x)</span> {            <span class="hljs-comment">// 第一个 &gt;= x 的下标（找不到返回 n）</span>
+	<span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = n;                            <span class="hljs-comment">// [l, r)</span>
+	<span class="hljs-keyword">while</span> (l &lt; r) {
+		<span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;               <span class="hljs-comment">// 防溢出</span>
+		<span class="hljs-keyword">if</span> (a[mid] &gt;= x) r = mid;                <span class="hljs-comment">// 答案在左半边（含 mid）</span>
+		<span class="hljs-keyword">else</span> l = mid + <span class="hljs-number">1</span>;                        <span class="hljs-comment">// 答案在右半边</span>
+	}
+	<span class="hljs-keyword">return</span> l;
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">upperBound</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> x)</span> {            <span class="hljs-comment">// 第一个 &gt; x（找不到返回 n）</span>
+	<span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = n;
+	<span class="hljs-keyword">while</span> (l &lt; r) {
+		<span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;
+		<span class="hljs-keyword">if</span> (a[mid] &gt; x) r = mid;
+		<span class="hljs-keyword">else</span> l = mid + <span class="hljs-number">1</span>;
+	}
+	<span class="hljs-keyword">return</span> l;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li><code>mid = (l + r) / 2</code> 在 l、r 接近 2e9 时溢出，写 <code>l + (r - l) / 2</code>。</li>
+<li>用左闭右开就全程别混用闭区间，<code>r</code> 初始是 <code>n</code> 不是 <code>n - 1</code>。</li>
+<li>想找&quot;最后一个 ≤ x&quot;：用 <code>upperBound(...) - 1</code>。</li>
+</ul>
+<h3 id="22-实数二分--答案二分">2.2 实数二分 / 答案二分</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// 实数二分：固定迭代 100 次，比 while (r - l &gt; eps) 更稳，不会因精度死循环</span>
+<span class="hljs-type">double</span> l = <span class="hljs-number">0</span>, r = <span class="hljs-number">1e9</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> t = <span class="hljs-number">0</span>; t &lt; <span class="hljs-number">100</span>; t++) {
+	<span class="hljs-type">double</span> mid = (l + r) / <span class="hljs-number">2</span>;
+	<span class="hljs-keyword">if</span> (check(mid)) r = mid;      <span class="hljs-comment">// mid 可行，答案在左边</span>
+	<span class="hljs-keyword">else</span> l = mid;                 <span class="hljs-comment">// mid 不可行，答案在右边</span>
+}
+</div></code></pre>
+<p><strong>答案二分</strong>（最大值最小 / 最小值最大）的套路：把&quot;求最优值&quot;改写成&quot;判定 <code>mid</code> 是否可行&quot;，<code>check</code> 必须是<strong>单调</strong>的（mid 可行则更大的 mid 也可行，或反之）。</p>
+<p><strong>易错点</strong></p>
+<ul>
+<li><code>check</code> 不单调就不能二分，先证单调性。</li>
+<li>二分答案的区间要包含所有可能答案（含端点）。</li>
+</ul>
+<hr>
+<h2 id="3-并查集">3. 并查集</h2>
+<p><strong>思路</strong>：每个集合用一棵树表示，根是代表元；查询时把路径上的点直接挂到根上（路径压缩），合并时把秩小的树挂到秩大的树下（按秩合并）。</p>
+<p><strong>复杂度</strong>：单次操作近似 <code>O(1)</code>（反阿克曼函数），n 次操作 <code>O(n α(n))</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-type">int</span> fa[MAXN], rk[MAXN];
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">dsuInit</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> {
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) { fa[i] = i; rk[i] = <span class="hljs-number">0</span>; }
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">dsuFind</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> {                               <span class="hljs-comment">// 查根 + 路径压缩</span>
+	<span class="hljs-keyword">return</span> fa[x] == x ? x : fa[x] = dsuFind(fa[x]);
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">dsuUnion</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y)</span> {                      <span class="hljs-comment">// 秩小的挂到秩大的下面</span>
+	x = dsuFind(x); y = dsuFind(y);
+	<span class="hljs-keyword">if</span> (x == y) <span class="hljs-keyword">return</span>;                          <span class="hljs-comment">// 已同集合</span>
+	<span class="hljs-keyword">if</span> (rk[x] &lt; rk[y]) { <span class="hljs-type">int</span> t = x; x = y; y = t; }
+	fa[y] = x;
+	<span class="hljs-keyword">if</span> (rk[x] == rk[y]) rk[x]++;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>合并前必须 <code>dsuFind</code>，不能直接 <code>fa[x] = y</code>。</li>
+<li>初始化时 <code>fa[i] = i</code>，从 0 开始还是 1 开始要和题目统一。</li>
+</ul>
+<p><strong>常见变体</strong></p>
+<ul>
+<li>带权并查集：额外维护 <code>dis[x]</code> 表示 x 到根的距离，<code>find</code> 时累加。</li>
+<li>种类并查集：开 <code>2n</code> 或 <code>3n</code> 个点表示&quot;敌人/朋友&quot;（如食物链）。</li>
+<li>应用：Kruskal 判环、连通块计数、离线查询。</li>
+</ul>
+<hr>
+<h2 id="4-树状数组">4. 树状数组</h2>
+<p><strong>思路</strong>：<code>bit[i]</code> 存的是区间 <code>(i - lowbit(i), i]</code> 的和，改一个点向上跳，查前缀向下跳。</p>
+<p><strong>复杂度</strong>：单点修改 / 前缀和均 <code>O(log n)</code>，空间 <code>O(n)</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-type">int</span> bit[MAXN], bitN;
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">bitInit</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> {
+	bitN = n;
+	<span class="hljs-built_in">memset</span>(bit, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>) * (n + <span class="hljs-number">1</span>));
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">bitAdd</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> v)</span> {                        <span class="hljs-comment">// 第 i 位加 v</span>
+	<span class="hljs-keyword">for</span> (; i &lt;= bitN; i += i &amp; -i) bit[i] += v;   <span class="hljs-comment">// lowbit = i &amp; -i，向上跳</span>
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">bitSum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> {                                <span class="hljs-comment">// 1..i 的和</span>
+	<span class="hljs-type">int</span> s = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (; i &gt; <span class="hljs-number">0</span>; i -= i &amp; -i) s += bit[i];       <span class="hljs-comment">// 向下跳</span>
+	<span class="hljs-keyword">return</span> s;
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">bitRange</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> {                       <span class="hljs-comment">// l..r 的和</span>
+	<span class="hljs-keyword">return</span> bitSum(r) - bitSum(l - <span class="hljs-number">1</span>);
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>下标必须从 1 开始，<code>bit[0]</code> 用不到（<code>i &amp; -i</code> 在 i=0 时为 0，会死循环）。</li>
+<li>上溯用 <code>i += lowbit</code>，下溯用 <code>i -= lowbit</code>，别写反。</li>
+</ul>
+<p><strong>常见变体</strong></p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>区间加、单点查</td>
+<td>对差分数组建树状数组</td>
+</tr>
+<tr>
+<td>区间加、区间查</td>
+<td>维护两个树状数组（<code>d[i]</code> 和 <code>i·d[i]</code>）</td>
+</tr>
+<tr>
+<td>求逆序对</td>
+<td>离散化后从后往前，答案累加 <code>bitSum(a[i]-1)</code></td>
+</tr>
+<tr>
+<td>求第 k 小</td>
+<td>树状数组上倍增（<code>O(log n)</code>）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-线段树">5. 线段树</h2>
+<p><strong>思路</strong>：每个节点管一段区间，区间修改时若被完全覆盖就打懒标记（不往下走），下次访问子节点前把标记下传。</p>
+<p><strong>复杂度</strong>：建树 <code>O(n)</code>，区间加 / 区间查 <code>O(log n)</code>，空间 <code>4n</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-type">long</span> <span class="hljs-type">long</span> seg[MAXN &lt;&lt; <span class="hljs-number">2</span>], lazy[MAXN &lt;&lt; <span class="hljs-number">2</span>];         <span class="hljs-comment">// 开 4 倍</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">segBuild</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> a[])</span> {
+	lazy[p] = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">if</span> (l == r) { seg[p] = a[l]; <span class="hljs-keyword">return</span>; }
+	<span class="hljs-type">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>;
+	segBuild(p &lt;&lt; <span class="hljs-number">1</span>, l, mid, a);
+	segBuild(p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, a);
+	seg[p] = seg[p &lt;&lt; <span class="hljs-number">1</span>] + seg[p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>];
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">segPushDown</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> {            <span class="hljs-comment">// 标记下传</span>
+	<span class="hljs-keyword">if</span> (lazy[p] == <span class="hljs-number">0</span> || l == r) <span class="hljs-keyword">return</span>;
+	<span class="hljs-type">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>;
+	seg[p &lt;&lt; <span class="hljs-number">1</span>]     += lazy[p] * (mid - l + <span class="hljs-number">1</span>);
+	lazy[p &lt;&lt; <span class="hljs-number">1</span>]    += lazy[p];
+	seg[p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>] += lazy[p] * (r - mid);
+	lazy[p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>] += lazy[p];
+	lazy[p] = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">segAdd</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr, <span class="hljs-type">long</span> <span class="hljs-type">long</span> v)</span> {   <span class="hljs-comment">// 区间加</span>
+	<span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr) {                      <span class="hljs-comment">// 完全覆盖</span>
+		seg[p] += v * (r - l + <span class="hljs-number">1</span>);
+		lazy[p] += v;
+		<span class="hljs-keyword">return</span>;
+	}
+	segPushDown(p, l, r);                          <span class="hljs-comment">// 部分覆盖：先下传</span>
+	<span class="hljs-type">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>;
+	<span class="hljs-keyword">if</span> (ql &lt;= mid) segAdd(p &lt;&lt; <span class="hljs-number">1</span>, l, mid, ql, qr, v);
+	<span class="hljs-keyword">if</span> (qr &gt; mid)  segAdd(p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr, v);
+	seg[p] = seg[p &lt;&lt; <span class="hljs-number">1</span>] + seg[p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>];
+}
+
+<span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">segQuery</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr)</span> {         <span class="hljs-comment">// 区间求和</span>
+	<span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr) <span class="hljs-keyword">return</span> seg[p];
+	segPushDown(p, l, r);                          <span class="hljs-comment">// 查询也要下传！</span>
+	<span class="hljs-type">int</span> mid = (l + r) &gt;&gt; <span class="hljs-number">1</span>;
+	<span class="hljs-type">long</span> <span class="hljs-type">long</span> res = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">if</span> (ql &lt;= mid) res += segQuery(p &lt;&lt; <span class="hljs-number">1</span>, l, mid, ql, qr);
+	<span class="hljs-keyword">if</span> (qr &gt; mid)  res += segQuery(p &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr);
+	<span class="hljs-keyword">return</span> res;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>数组开 <code>4n</code>，开 <code>2n</code> 会越界。</li>
+<li><code>pushDown</code> 必须在递归子节点<strong>之前</strong>调用，<code>segAdd</code> 和 <code>segQuery</code> 都要。</li>
+<li>完全覆盖才打标记；部分覆盖必须递归后再 <code>pushUp</code>。</li>
+<li>多组数据时 <code>build</code> 要重新清零 <code>lazy</code>。</li>
+</ul>
+<p><strong>常见变体</strong>：区间乘（先乘后加，两个懒标记）、区间最值、单点修改（不需要 lazy）、动态开点 / 可持久化。</p>
+<hr>
+<h2 id="6-图论链式前向星--dijkstra">6. 图论：链式前向星 + Dijkstra</h2>
+<p><strong>思路</strong>：<code>head[u]</code> 指向 u 的第一条边，每条边存 <code>to</code>、<code>w</code>、<code>nxt</code>（下一条边的编号）。Dijkstra 每次从堆里取当前距离最小的点，用它松弛邻边。</p>
+<p><strong>复杂度</strong>：<code>O((n + m) log n)</code>；要求<strong>边权非负</strong>。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span> <span class="hljs-type">int</span> to, w, nxt; } Edge;
+Edge e[MAXM];
+<span class="hljs-type">int</span> head[MAXN], ecnt;
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">graphInit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> {
+	<span class="hljs-built_in">memset</span>(head, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(head));
+	ecnt = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">addEdge</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> v, <span class="hljs-type">int</span> w)</span> {                <span class="hljs-comment">// 无向图对 (u,v) 和 (v,u) 各调一次</span>
+	e[++ecnt].to  = v;
+	e[ecnt].w    = w;
+	e[ecnt].nxt  = head[u];
+	head[u] = ecnt;
+}
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span> <span class="hljs-type">int</span> d, u; } Node;                 <span class="hljs-comment">// 距离、点</span>
+Node heap[MAXM + <span class="hljs-number">5</span>];
+<span class="hljs-type">int</span> hn;
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">heapPush</span><span class="hljs-params">(Node x)</span> {                            <span class="hljs-comment">// 上浮</span>
+	<span class="hljs-type">int</span> i = ++hn;
+	heap[i] = x;
+	<span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">1</span> &amp;&amp; heap[i].d &lt; heap[i &gt;&gt; <span class="hljs-number">1</span>].d) {
+		Node t = heap[i]; heap[i] = heap[i &gt;&gt; <span class="hljs-number">1</span>]; heap[i &gt;&gt; <span class="hljs-number">1</span>] = t;
+		i &gt;&gt;= <span class="hljs-number">1</span>;
+	}
+}
+
+Node <span class="hljs-title function_">heapPop</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> {                               <span class="hljs-comment">// 取堆顶 + 下沉</span>
+	Node top = heap[<span class="hljs-number">1</span>];
+	heap[<span class="hljs-number">1</span>] = heap[hn--];
+	<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;
+	<span class="hljs-keyword">for</span> (;;) {
+		<span class="hljs-type">int</span> s = i, l = i &lt;&lt; <span class="hljs-number">1</span>, r = l | <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">if</span> (l &lt;= hn &amp;&amp; heap[l].d &lt; heap[s].d) s = l;
+		<span class="hljs-keyword">if</span> (r &lt;= hn &amp;&amp; heap[r].d &lt; heap[s].d) s = r;
+		<span class="hljs-keyword">if</span> (s == i) <span class="hljs-keyword">break</span>;
+		Node t = heap[i]; heap[i] = heap[s]; heap[s] = t;
+		i = s;
+	}
+	<span class="hljs-keyword">return</span> top;
+}
+
+<span class="hljs-type">int</span> dist[MAXN];
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">dijkstra</span><span class="hljs-params">(<span class="hljs-type">int</span> s, <span class="hljs-type">int</span> n)</span> {                      <span class="hljs-comment">// 结果在 dist[1..n]</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) dist[i] = INF;
+	dist[s] = <span class="hljs-number">0</span>;
+	hn = <span class="hljs-number">0</span>;
+	heapPush((Node){<span class="hljs-number">0</span>, s});
+	<span class="hljs-keyword">while</span> (hn &gt; <span class="hljs-number">0</span>) {
+		Node cur = heapPop();
+		<span class="hljs-type">int</span> u = cur.u, d = cur.d;
+		<span class="hljs-keyword">if</span> (d &gt; dist[u]) <span class="hljs-keyword">continue</span>;                <span class="hljs-comment">// 过期元素，丢掉</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = head[u]; i != <span class="hljs-number">0</span>; i = e[i].nxt) {
+			<span class="hljs-type">int</span> v = e[i].to;
+			<span class="hljs-keyword">if</span> (dist[v] &gt; d + e[i].w) {           <span class="hljs-comment">// 松弛成功才入堆</span>
+				dist[v] = d + e[i].w;
+				heapPush((Node){dist[v], v});
+			}
+		}
+	}
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>C 没有 <code>priority_queue</code>，必须自己写堆；堆大小开&quot;边数 + 5&quot;。</li>
+<li>堆里可能有同一个点的多个旧距离，弹出时用 <code>d &gt; dist[u]</code> 过滤。</li>
+<li>边权有负数时 Dijkstra 失效，改用 Bellman-Ford / SPFA（或 Johnson）。</li>
+<li>稠密图（m ≈ n²）用邻接矩阵 <code>O(n²)</code> 版本反而更快。</li>
+</ul>
+<hr>
+<h2 id="7-字符串kmp">7. 字符串：KMP</h2>
+<p><strong>思路</strong>：先对模式串求 <code>nxt</code>（<code>nxt[i]</code> = <code>p[0..i]</code> 的最长相等前后缀长度），匹配失配时模式串指针沿 <code>nxt</code> 回退，主串指针不回退。</p>
+<p><strong>复杂度</strong>：预处理 <code>O(m)</code>，匹配 <code>O(n)</code>，总 <code>O(n + m)</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-type">void</span> <span class="hljs-title function_">kmpNext</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> p[], <span class="hljs-type">int</span> nxt[])</span> {
+	<span class="hljs-type">int</span> m = (<span class="hljs-type">int</span>)<span class="hljs-built_in">strlen</span>(p);
+	<span class="hljs-keyword">if</span> (m == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
+	nxt[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, j = <span class="hljs-number">0</span>; i &lt; m; i++) {
+		<span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; p[i] != p[j]) j = nxt[j - <span class="hljs-number">1</span>];
+		<span class="hljs-keyword">if</span> (p[i] == p[j]) j++;
+		nxt[i] = j;
+	}
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">kmpCount</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> s[], <span class="hljs-type">const</span> <span class="hljs-type">char</span> p[], <span class="hljs-type">const</span> <span class="hljs-type">int</span> nxt[])</span> {   <span class="hljs-comment">// 出现次数</span>
+	<span class="hljs-type">int</span> n = (<span class="hljs-type">int</span>)<span class="hljs-built_in">strlen</span>(s), m = (<span class="hljs-type">int</span>)<span class="hljs-built_in">strlen</span>(p), cnt = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">if</span> (m == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>; i &lt; n; i++) {
+		<span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; s[i] != p[j]) j = nxt[j - <span class="hljs-number">1</span>];
+		<span class="hljs-keyword">if</span> (s[i] == p[j]) j++;
+		<span class="hljs-keyword">if</span> (j == m) {
+			cnt++;
+			j = nxt[j - <span class="hljs-number">1</span>];                    <span class="hljs-comment">// 允许重叠；不允许重叠写 j = 0</span>
+		}
+	}
+	<span class="hljs-keyword">return</span> cnt;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li><code>nxt[0] = 0</code>，且回退用 <code>nxt[j - 1]</code> 不是 <code>nxt[j]</code>（取决于定义，别混用两种写法）。</li>
+<li>匹配成功后要 <code>j = nxt[j - 1]</code> 继续找，否则漏掉重叠出现。</li>
+<li>求最小循环节：若 <code>m % (m - nxt[m-1]) == 0</code>，循环节长度是 <code>m - nxt[m-1]</code>。</li>
+</ul>
+<hr>
+<h2 id="8-快速幂--快速乘">8. 快速幂 / 快速乘</h2>
+<p><strong>思路</strong>：把指数二进制拆分，底数不断平方，<code>O(log b)</code> 次乘法。</p>
+<pre class="hljs"><code><div><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">qpow</span><span class="hljs-params">(<span class="hljs-type">long</span> <span class="hljs-type">long</span> a, <span class="hljs-type">long</span> <span class="hljs-type">long</span> b, <span class="hljs-type">long</span> <span class="hljs-type">long</span> mod)</span> {   <span class="hljs-comment">// a^b % mod</span>
+	<span class="hljs-type">long</span> <span class="hljs-type">long</span> r = <span class="hljs-number">1</span> % mod;                     <span class="hljs-comment">// mod == 1 时结果 0</span>
+	<span class="hljs-keyword">while</span> (b &gt; <span class="hljs-number">0</span>) {
+		<span class="hljs-keyword">if</span> (b &amp; <span class="hljs-number">1</span>) r = r * a % mod;
+		a = a * a % mod;
+		b &gt;&gt;= <span class="hljs-number">1</span>;
+	}
+	<span class="hljs-keyword">return</span> r;
+}
+
+<span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">qmul</span><span class="hljs-params">(<span class="hljs-type">long</span> <span class="hljs-type">long</span> a, <span class="hljs-type">long</span> <span class="hljs-type">long</span> b, <span class="hljs-type">long</span> <span class="hljs-type">long</span> mod)</span> {   <span class="hljs-comment">// a*b % mod，防溢出</span>
+	<span class="hljs-type">long</span> <span class="hljs-type">long</span> r = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">while</span> (b &gt; <span class="hljs-number">0</span>) {
+		<span class="hljs-keyword">if</span> (b &amp; <span class="hljs-number">1</span>) r = (r + a) % mod;
+		a = a * <span class="hljs-number">2</span> % mod;
+		b &gt;&gt;= <span class="hljs-number">1</span>;
+	}
+	<span class="hljs-keyword">return</span> r;
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li><code>1 % mod</code> 而不是 <code>1</code>，否则 mod = 1 时答案错。</li>
+<li>mod 接近 1e18 时 <code>a * a</code> 直接溢出，改用 <code>qmul</code> 或 <code>__int128</code>。</li>
+<li>负指数要先求逆元（<code>qpow(a, mod-2, mod)</code> 当 mod 是素数）。</li>
+</ul>
+<hr>
+<h2 id="9-01-背包">9. 01 背包</h2>
+<p><strong>思路</strong>：<code>dp[j]</code> 表示容量 j 能装的最大价值，逐件物品考虑，容量<strong>倒序</strong>更新，保证每件只用一次。</p>
+<p><strong>复杂度</strong>：<code>O(nW)</code> 时间，<code>O(W)</code> 空间。</p>
+<pre class="hljs"><code><div><span class="hljs-type">int</span> knapDp[MAXN];                                  <span class="hljs-comment">// 容量上限别超过 MAXN</span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">knap01</span><span class="hljs-params">(<span class="hljs-type">int</span> w[], <span class="hljs-type">int</span> v[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> W)</span> {       <span class="hljs-comment">// w、v 从 1 开始</span>
+	<span class="hljs-built_in">memset</span>(knapDp, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>) * (W + <span class="hljs-number">1</span>));
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) {
+		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = W; j &gt;= w[i]; j--) {          <span class="hljs-comment">// 倒序：保证一件最多用一次</span>
+			<span class="hljs-keyword">if</span> (knapDp[j] &lt; knapDp[j - w[i]] + v[i])
+				knapDp[j] = knapDp[j - w[i]] + v[i];
+		}
+	}
+	<span class="hljs-keyword">return</span> knapDp[W];
+}
+</div></code></pre>
+<p><strong>易错点</strong></p>
+<ul>
+<li>倒序写成正序就变成<strong>完全背包</strong>（每件无限用）。</li>
+<li>&quot;恰好装满&quot;时初始化 <code>dp[0] = 0</code>，其余 <code>-INF</code>；&quot;不超过容量&quot;才全部初始化为 0。</li>
+<li>体积和价值都很大时考虑 meet-in-the-middle 或按价值 DP。</li>
+</ul>
+<p><strong>其余背包</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>循环方向</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 背包</td>
+<td>容量倒序</td>
+<td>每件 1 次</td>
+</tr>
+<tr>
+<td>完全背包</td>
+<td>容量正序</td>
+<td>每件无限次</td>
+</tr>
+<tr>
+<td>多重背包</td>
+<td>二进制拆分 / 单调队列</td>
+<td>第 i 件有 c 个</td>
+</tr>
+<tr>
+<td>分组背包</td>
+<td>先组、再容量倒序、再组内物品</td>
+<td>每组最多选 1 个</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="10-前缀和--差分">10. 前缀和 / 差分</h2>
+<h3 id="101-前缀和">10.1 前缀和</h3>
+<pre class="hljs"><code><div><span class="hljs-type">long</span> <span class="hljs-type">long</span> pre[MAXN];                               <span class="hljs-comment">// pre[i] = a[1] + ... + a[i]</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">prefixSum</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n)</span> {
+	pre[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) pre[i] = pre[i - <span class="hljs-number">1</span>] + a[i];
+}
+
+<span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">rangeSum</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> {                 <span class="hljs-comment">// O(1) 求 a[l..r]</span>
+	<span class="hljs-keyword">return</span> pre[r] - pre[l - <span class="hljs-number">1</span>];
+}
+</div></code></pre>
+<h3 id="102-差分">10.2 差分</h3>
+<p><strong>用途</strong>：多次&quot;区间整体加 v&quot;，最后一次性还原。</p>
+<pre class="hljs"><code><div><span class="hljs-type">int</span> diff[MAXN + <span class="hljs-number">2</span>];                                <span class="hljs-comment">// 开 n+2，防 r+1 越界</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">diffBuild</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n)</span> {                   <span class="hljs-comment">// 由原数组构造差分</span>
+	<span class="hljs-built_in">memset</span>(diff, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>) * (n + <span class="hljs-number">2</span>));
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) {
+		diff[i]     += a[i];
+		diff[i + <span class="hljs-number">1</span>] -= a[i];
+	}
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">diffAdd</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> v)</span> {                <span class="hljs-comment">// a[l..r] 整体加 v，O(1)</span>
+	diff[l]     += v;
+	diff[r + <span class="hljs-number">1</span>] -= v;
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">diffToArray</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> n)</span> {                 <span class="hljs-comment">// 前缀和还原</span>
+	<span class="hljs-type">int</span> cur = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) { cur += diff[i]; a[i] = cur; }
+}
+</div></code></pre>
+<h3 id="103-二维版公式备查">10.3 二维版（公式备查）</h3>
+<pre class="hljs"><code><div>二维前缀和：
+  pre[i][j] = a[i][j] + pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1]
+
+子矩阵 (x1,y1)~(x2,y2) 的和：
+  pre[x2][y2] - pre[x1-1][y2] - pre[x2][y1-1] + pre[x1-1][y1-1]
+
+二维差分（子矩阵整体加 v）：
+  (x1,y1) += v, (x2+1,y1) -= v, (x1,y2+1) -= v, (x2+1,y2+1) += v
+</div></code></pre>
+<hr>
+<h2 id="11-速查表">11. 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>预处理</th>
+<th>单次操作</th>
+<th>空间</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>快速排序</td>
+<td>—</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(log n)</code></td>
+<td>通用排序，常数小</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>—</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n)</code></td>
+<td>稳定排序、逆序对</td>
+</tr>
+<tr>
+<td>二分查找</td>
+<td>排序 <code>O(n log n)</code></td>
+<td><code>O(log n)</code></td>
+<td><code>O(1)</code></td>
+<td>有序表查找、答案二分</td>
+</tr>
+<tr>
+<td>并查集</td>
+<td><code>O(n)</code></td>
+<td><code>O(α(n))</code></td>
+<td><code>O(n)</code></td>
+<td>连通性、Kruskal</td>
+</tr>
+<tr>
+<td>树状数组</td>
+<td><code>O(n)</code></td>
+<td><code>O(log n)</code></td>
+<td><code>O(n)</code></td>
+<td>单点改 + 前缀和、逆序对</td>
+</tr>
+<tr>
+<td>线段树</td>
+<td><code>O(n)</code></td>
+<td><code>O(log n)</code></td>
+<td><code>O(4n)</code></td>
+<td>区间改 + 区间查</td>
+</tr>
+<tr>
+<td>Dijkstra（堆）</td>
+<td>—</td>
+<td><code>O((n+m) log n)</code></td>
+<td><code>O(n+m)</code></td>
+<td>非负权最短路</td>
+</tr>
+<tr>
+<td>KMP</td>
+<td><code>O(m)</code></td>
+<td><code>O(n)</code></td>
+<td><code>O(m)</code></td>
+<td>字符串匹配、循环节</td>
+</tr>
+<tr>
+<td>快速幂</td>
+<td>—</td>
+<td><code>O(log b)</code></td>
+<td><code>O(1)</code></td>
+<td>取模幂、矩阵幂、逆元</td>
+</tr>
+<tr>
+<td>01 背包</td>
+<td>—</td>
+<td><code>O(nW)</code></td>
+<td><code>O(W)</code></td>
+<td>容量型最优化</td>
+</tr>
+<tr>
+<td>前缀和</td>
+<td><code>O(n)</code></td>
+<td><code>O(1)</code></td>
+<td><code>O(n)</code></td>
+<td>静态区间和</td>
+</tr>
+<tr>
+<td>差分</td>
+<td><code>O(n)</code></td>
+<td><code>O(1)</code>（改）</td>
+<td><code>O(n)</code></td>
+<td>多次区间加</td>
+</tr>
+</tbody>
+</table>
+<p><strong>按题目规模选算法（经验值，1 秒约 1e8 次运算）</strong></p>
+<table>
+<thead>
+<tr>
+<th>n 的范围</th>
+<th>可以接受的复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n ≤ 10</code></td>
+<td><code>O(n!)</code>、全排列</td>
+</tr>
+<tr>
+<td><code>n ≤ 20</code></td>
+<td><code>O(2^n)</code>、状压 DP</td>
+</tr>
+<tr>
+<td><code>n ≤ 100</code></td>
+<td><code>O(n³)</code>、Floyd</td>
+</tr>
+<tr>
+<td><code>n ≤ 1000</code></td>
+<td><code>O(n²)</code>、朴素 DP</td>
+</tr>
+<tr>
+<td><code>n ≤ 1e5</code></td>
+<td><code>O(n log n)</code>、二分、树状数组、线段树</td>
+</tr>
+<tr>
+<td><code>n ≤ 1e6</code></td>
+<td><code>O(n)</code>、前缀和、双指针</td>
+</tr>
+<tr>
+<td><code>n ≤ 1e18</code></td>
+<td><code>O(log n)</code>、快速幂、矩阵快速幂</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="12-易错点总清单">12. 易错点总清单</h2>
+<p><strong>下标与边界</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">图论/树状数组/线段树/差分是不是从 1 开始？二分是不是从 0 开始？</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">数组有没有多开 5 个防 <code>r+1</code>、<code>i+1</code> 越界？</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">递归出口是 <code>l &gt;= r</code> 还是 <code>l &gt; r</code>？</label></li>
+</ul>
+<p><strong>数值</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">计数、区间和、乘法中间结果有没有用 <code>long long</code>？</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4"><code>INF</code> 相加会不会溢出？<code>INF = 0x3f3f3f3f</code> 是安全值。</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">取模时 <code>1 % mod</code>、负数取模 <code>(x % mod + mod) % mod</code> 处理了吗？</label></li>
+</ul>
+<p><strong>数据结构</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">线段树数组开 4 倍、<code>pushDown</code> 在递归前、查询也要下传。</label></li>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">多组数据时全局数组、<code>lazy</code> 有没有重新清零？</label></li>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">并查集合并前有没有 <code>find</code>？</label></li>
+</ul>
+<p><strong>图论</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">无向图是不是加了两次边？边数组开了 <code>2m</code> 吗？</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">堆大小够不够（边数 + 5）？过期元素有没有过滤？</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">边权可能为负时还敢用 Dijkstra 吗？</label></li>
+</ul>
+<p><strong>字符串</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12"><code>nxt</code> 的下标是 <code>j</code> 还是 <code>j-1</code>？和模板保持一致。</label></li>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">找所有出现时有没有处理重叠？</label></li>
+</ul>
+<hr>
+<h2 id="13-后续可以加进来的板子">13. 后续可以加进来的板子</h2>
+<p>按优先级排：</p>
+<ol>
+<li><strong>单调栈 / 单调队列</strong>（滑动窗口最值、下一个更大元素）</li>
+<li><strong>LIS</strong>（<code>O(n log n)</code> 贪心 + 二分）</li>
+<li><strong>拓扑排序</strong>（BFS 版）</li>
+<li><strong>Kruskal</strong>（并查集 + 边排序）</li>
+<li><strong>Floyd</strong>（多源最短路，<code>O(n³)</code>）</li>
+<li><strong>LCA 倍增</strong>（树上距离、路径查询）</li>
+<li><strong>区间 DP</strong>（石子合并、最长回文子序列）</li>
+<li><strong>状压 DP</strong>（TSP、集合划分）</li>
+<li><strong>矩阵快速幂</strong>（线性递推加速）</li>
+<li><strong>字典树 Trie / 字符串哈希</strong></li>
+</ol>
+<blockquote>
+<p>需要哪个直接说，我按同样的注释风格追加到 <code>算法板子_常用合集.c</code> 和这份笔记里。</p>
+</blockquote>
+
+</body>
+</html>
